@@ -30,14 +30,20 @@ function Tile:draw(y, x)
     )
 
     if self.doOverlay then
-        local overlay = Tilesets.ground.quads["city"][5]
+        local overlay = Tilesets.overlays.quads.overlays
         love.graphics.draw(
-            Tilesets.ground.spritesheet,
+            Tilesets.overlays.spritesheet,
             overlay,
             (x - 1) * 16 * SCALING,
             (y - 1) * 16 * SCALING,
             0,
             SCALING
+        )
+        love.graphics.print(
+            {{0, 0, 0}, tostring(self.range)}, 
+            ((x - 1) * 16 + 6) * SCALING, 
+            ((y - 1) * 16 + 6) * SCALING,
+            0, 2
         )
     end
 

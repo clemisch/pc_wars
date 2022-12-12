@@ -74,7 +74,8 @@ function Map:select(y, x)
         local range = selectedTile.unit.range
         
         local function find_tile(yy, xx, rr, out)
-            out[coords_to_string(yy, xx)] = true
+            local key = coords_to_string(yy, xx)
+            out[key] = math.max(rr, out[key] or 0)
             
             if rr == 0 then
                 return out
@@ -98,9 +99,10 @@ function Map:select(y, x)
         find_tile(y, x, range, self.tiles_move)
 
         -- activate overlay over tiles unit could move to
-        for k, _ in pairs(self.tiles_move) do
+        for k, rr in pairs(self.tiles_move) do
             local y, x = string_to_coords(k)
             self.tileTable[y][x].doOverlay = true
+            self.tileTable[y][x].range = rr
         end
     
     end
@@ -118,6 +120,7 @@ function Map:deSelect(y, x)
     for k, _ in pairs(self.tiles_move) do
         local y, x = string_to_coords(k)
         self.tileTable[y][x].doOverlay = false
+        self.tileTable[y][x].range = nil
     end
 
 end

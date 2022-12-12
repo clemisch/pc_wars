@@ -67,10 +67,18 @@ cursor.quads = {}
 cursor.spritesheet = love.graphics.newImage('img/cursor/cursor.png')
 cursor.quads.cursor = getQuad(1, 1, 1, 1, cursor.spritesheet)
 
+-- overlay tileset
+local overlays = {}
+overlays.quads = {}
+overlays.spritesheet = love.graphics.newImage('img/overlays/move.png')
+overlays.quads.overlays = getQuad(1, 1, 1, 1, overlays.spritesheet)
+
+
 
 
 tilesets.ground = ground
 tilesets.units = units
 tilesets.cursor = cursor
+tilesets.overlays = overlays
 
 return tilesets
