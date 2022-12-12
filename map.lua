@@ -66,7 +66,7 @@ function Map:select(y, x)
         self.selected = {y = y, x = x, tile = selectedTile}
 
         -- find tiles unit could move to
-        local range = self.selected.tile.unit.range
+        local range = selectedTile.unit.range
         
         local function find_tile(yy, xx, rr, out)
             local key = string.format("%i,%i", yy, xx)
