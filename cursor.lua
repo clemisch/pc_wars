@@ -35,12 +35,13 @@ function Cursor:moveAbs(y, x)
 end
 
 function Cursor:update(key)
-    if  key == 'w'      then self:moveRel(-1, 0)    elseif
-        key == 's'      then self:moveRel(1, 0)     elseif
-        key == 'd'      then self:moveRel(0, 1)     elseif
-        key == 'a'      then self:moveRel(0, -1)    elseif
-        key == 'k'      then self:select()          elseif
-        key == 'l'      then self:deSelect()
+    if  
+        key == 'w' then self:moveRel(-1, 0)    elseif
+        key == 's' then self:moveRel(1, 0)     elseif
+        key == 'd' then self:moveRel(0, 1)     elseif
+        key == 'a' then self:moveRel(0, -1)    elseif
+        key == 'k' then self:select()          elseif
+        key == 'l' then self:deSelect()
     end
 end
 

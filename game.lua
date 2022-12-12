@@ -50,8 +50,9 @@ end
 
 
 function Game:keypressed(key)
-    if key == "p"      then Gamestate.push(pause.Pause) elseif
-       key == "escape" then love.event.quit()
+    if 
+        key == "p"      then Gamestate.push(pause.Pause) elseif
+        key == "escape" then love.event.quit()
     end
 
     self.cursor:update(key)
