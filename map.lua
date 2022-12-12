@@ -74,10 +74,9 @@ function Map:select(y, x)
         local range = selectedTile.unit.range
         
         local function find_tile(yy, xx, rr, out)
-            -- abort if visited before with more range
+            -- abort if visited before with more or same range
             local key = coords_to_string(yy, xx)
             local prev_range = out[key] or -1
-            
             if prev_range >= rr then 
                 return 
             end
@@ -85,7 +84,7 @@ function Map:select(y, x)
             out[key] = rr
             
             if rr == 0 then
-                return out
+                return 
             end
             
             if yy + 1 < HEIGHT_TILES then
@@ -103,17 +102,13 @@ function Map:select(y, x)
         end
         
         self.tiles_move = {}
-
-        local tStart = love.timer.getTime()
         find_tile(y, x, range, self.tiles_move)
-        local tStop = love.timer.getTime()
-        print(string.format("Found tiles in %.2f ms", (tStop - tStart) * 1000))
 
         -- activate overlay over tiles unit could move to
         for k, rr in pairs(self.tiles_move) do
             local y, x = string_to_coords(k)
             self.tileTable[y][x].doOverlay = true
-            self.tileTable[y][x].range = rr
+            self.tileTable[y][x].range = range - rr
         end
     
     end
@@ -132,9 +127,34 @@ function Map:deSelect(y, x)
         local y, x = string_to_coords(k)
         self.tileTable[y][x].doOverlay = false
         self.tileTable[y][x].range = nil
+        self.tiles_move = nil
+    end
+end
+
+
+function Map:move_unit(y, x)
+    --[[
+    Try to move selected unit to (y, x). 
+    New tile must be empty and within movement range.
+    --]]
+    if self.tileTable[y][x].unit then
+        return
     end
 
+    local key = coords_to_string(y, x)
+    if not self.tiles_move[key] then
+        return
+    end
+
+    local unit = self.selected.tile.unit
+    self.tileTable[y][x].unit = unit
+    unit:deSelect()
+    
+    -- clear old tile
+    self.selected.tile.unit = nil
+    self:deSelect(self.selected.y, self.selected.x)
 end
+
 
 
 return {

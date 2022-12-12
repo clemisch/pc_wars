@@ -59,21 +59,7 @@ end
 function Cursor:select()
     -- move selected unit to cursor
     if self.map.isSelect then
-        -- do nothing if new tile contains unit
-        if self.map.tileTable[self.y][self.x].unit then
-            return nil
-        end
-
-        -- set new tile
-        local unit = self.map.selected.tile.unit
-        unit:deSelect()
-        self.map.tileTable[self.y][self.x].unit = unit
-        
-        -- clear old tile
-        self.map.selected.tile.unit = nil
-        self.map:deSelect(self.map.selected.y, self.map.selected.x)
-
-    -- select unit
+        self.map:move_unit(self.y, self.x)
     else
         self.map:select(self.y, self.x)
     end
