@@ -5,6 +5,11 @@ local tile = require('tile')
 local unit = require('unit') 
 
 
+
+local function coords_to_string(y, x)
+    return string.format("%i,%i", y, x)
+end
+
 local function string_to_coords(str)
     local y = tonumber(str:match("[%w]+"))
     local x = tonumber(str:match(",([%w]+)"))
@@ -69,8 +74,7 @@ function Map:select(y, x)
         local range = selectedTile.unit.range
         
         local function find_tile(yy, xx, rr, out)
-            local key = string.format("%i,%i", yy, xx)
-            out[key] = true
+            out[coords_to_string(yy, xx)] = true
             
             if rr == 0 then
                 return out
