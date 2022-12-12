@@ -74,8 +74,15 @@ function Map:select(y, x)
         local range = selectedTile.unit.range
         
         local function find_tile(yy, xx, rr, out)
+            -- abort if visited before with more range
             local key = coords_to_string(yy, xx)
-            out[key] = math.max(rr, out[key] or 0)
+            local prev_range = out[key] or -1
+            
+            if prev_range >= rr then 
+                return 
+            end
+
+            out[key] = rr
             
             if rr == 0 then
                 return out
@@ -96,7 +103,11 @@ function Map:select(y, x)
         end
         
         self.tiles_move = {}
+
+        local tStart = love.timer.getTime()
         find_tile(y, x, range, self.tiles_move)
+        local tStop = love.timer.getTime()
+        print(string.format("Found tiles in %.2f ms", (tStop - tStart) * 1000))
 
         -- activate overlay over tiles unit could move to
         for k, rr in pairs(self.tiles_move) do
