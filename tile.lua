@@ -52,11 +52,11 @@ function Tile:draw(y, x)
     end
 end
 
-function Tile:setUnit(unit)
+function Tile:set_unit(unit)
     self.unit = unit
 end
 
-function Tile:getUnit(unit)
+function Tile:get_unit(unit)
     return self.unit
 end
 
