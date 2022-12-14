@@ -18,12 +18,12 @@ loader.groundNumToString = {
 -- encode units with integers; define string names for readability
 loader.unitNumToString = {
     [0] = nil,
-    [1] = 'soldierNormal',
-    [2] = 'soldierMech',
-    [3] = 'tankLight',
-    [4] = 'tankMedium',
-    [5] = 'tankHeavy',
-    [6] = 'tankUltra',
+    [1] = 'soldier_normal',
+    [2] = 'soldier_mech',
+    [3] = 'tank_light',
+    [4] = 'tank_medium',
+    [5] = 'tank_heavy',
+    [6] = 'tank_ultra',
 }
 
 loader.groundStringToNum = {}

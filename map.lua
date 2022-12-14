@@ -94,7 +94,7 @@ function Map:select(y, x)
             end
 
             -- add tile to legal tiles if we could move there
-            -- (not *through* there: if friendly unit on tile, we can move but can't stay)
+            -- (*through* is not enough: if friendly unit on tile, we can move but can't stay)
             if this_tile.unit == nil then
                 out[key] = rr
             end
@@ -136,15 +136,16 @@ function Map:deSelect(y, x)
         self.selected.tile:deSelect()
         self.selected = nil
         self.isSelect = false
+        
+        -- deactivate movement overlay
+        for k, _ in pairs(self.tiles_move) do
+            local y, x = string_to_coords(k)
+            self.tileTable[y][x].doOverlay = false
+            self.tileTable[y][x].range = nil
+            self.tiles_move = nil
+        end
     end
 
-    -- deactivate movement overlay
-    for k, _ in pairs(self.tiles_move) do
-        local y, x = string_to_coords(k)
-        self.tileTable[y][x].doOverlay = false
-        self.tileTable[y][x].range = nil
-        self.tiles_move = nil
-    end
 end
 
 

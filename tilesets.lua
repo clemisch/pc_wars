@@ -47,9 +47,9 @@ end
 local units = {}
 units.spritesheet = love.graphics.newImage('img/units/0.png')
 units.quadSpecs = {
-    soldierNormal = {y = 1, x = 1, sizeY = 1, sizeX = 1},
-    soldierMech   = {y = 1, x = 2, sizeY = 1, sizeX = 1},
-    -- tankLight     = {y = 3, x = 1, sizeY = 2, sizeX = 1}
+    soldier_normal = {y = 1, x = 1, sizeY = 1, sizeX = 1},
+    soldier_mech   = {y = 1, x = 2, sizeY = 1, sizeX = 1},
+    -- tank_light     = {y = 3, x = 1, sizeY = 2, sizeX = 1}
 }
 units.quads = {}
 for name, spec in pairs(units.quadSpecs) do
