@@ -57,7 +57,6 @@ function Cursor:draw()
 end
 
 function Cursor:select()
-    -- move selected unit to cursor
     if self.map.isSelect then
         self.map:move_unit(self.y, self.x)
     else

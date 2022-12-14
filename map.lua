@@ -25,7 +25,7 @@ function Map:init(name)
     local tStart = love.timer.getTime()
     self:load(name)
     local tStop = love.timer.getTime()
-    print("Loaded level in ", tStop - tStart)
+    print(("Loaded level in %.2f ms"):format(1000 * (tStop - tStart)))
 end
 
 
@@ -44,7 +44,7 @@ function Map:load(name)
 
             -- TODO: move this check into unit.Unit
             if unitStr then
-                tile:setUnit(unit.Unit(unitStr, unitsOwner))
+                tile:set_unit(unit.Unit(unitStr, unitsOwner))
             end
             
             self.tileTable[y][x] = tile
@@ -64,7 +64,7 @@ end
 
 function Map:select(y, x)
     -- select unit if tile contains one
-    if not self.isSelect and self.tileTable[y][x]:getUnit() ~= nil then
+    if not self.isSelect and self.tileTable[y][x]:get_unit() ~= nil then
         self.isSelect = true
         local selectedTile = self.tileTable[y][x]
         selectedTile:select()
@@ -74,26 +74,42 @@ function Map:select(y, x)
         local range = selectedTile.unit.range
         
         local function find_tile(yy, xx, rr, out)
-            -- abort if visited before with more or same range
+            local this_tile = self.tileTable[yy][xx]
+
+            -- abort if move to/through tile is illegal
+            --  * enemy unit
+            --  * TODO: illegal terrain
+            if (
+                this_tile.unit and
+                this_tile.unit.owner ~= selectedTile.unit.owner
+            ) then
+                return
+            end
+
+            -- abort if visited tile before with more or same range
             local key = coords_to_string(yy, xx)
             local prev_range = out[key] or -1
             if prev_range >= rr then 
                 return 
             end
 
-            out[key] = rr
+            -- add tile to legal tiles if we could move there
+            -- (not *through* there: if friendly unit on tile, we can move but can't stay)
+            if this_tile.unit == nil then
+                out[key] = rr
+            end
             
             if rr == 0 then
                 return 
             end
             
-            if yy + 1 < HEIGHT_TILES then
+            if yy + 1 <= HEIGHT_TILES then
                 find_tile(yy + 1, xx, rr - 1, out)
             end
             if yy - 1 > 0 then
                 find_tile(yy - 1, xx, rr - 1, out)
             end
-            if xx + 1 < WIDTH_TILES then
+            if xx + 1 <= WIDTH_TILES then
                 find_tile(yy, xx + 1, rr - 1, out)
             end
             if xx - 1 > 0 then
