@@ -30,6 +30,7 @@ function Tile:draw(y, x)
     )
 
     if self.doOverlay then
+        -- white overlay
         local overlay = Tilesets.overlays.quads.overlays
         love.graphics.draw(
             Tilesets.overlays.spritesheet,
@@ -39,6 +40,7 @@ function Tile:draw(y, x)
             0,
             SCALING
         )
+        -- number of moves to get this tile
         love.graphics.print(
             {{0, 0, 0}, tostring(self.range)}, 
             ((x - 1) * 16 + 6) * SCALING, 
