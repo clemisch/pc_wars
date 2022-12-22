@@ -21,7 +21,7 @@ local Map = Class.new()
 function Map:init(name)
     self.name = name
     self.tileTable = {}
-    self.isSelect = false
+    self.is_select = false
     local tStart = love.timer.getTime()
     self:load(name)
     local tStop = love.timer.getTime()
@@ -64,14 +64,19 @@ end
 
 function Map:select(y, x)
     -- select unit if tile contains one
-    if not self.isSelect and self.tileTable[y][x]:get_unit() ~= nil then
-        self.isSelect = true
-        local selectedTile = self.tileTable[y][x]
-        selectedTile:select()
-        self.selected = {y = y, x = x, tile = selectedTile}
+    local tile_sel = self.tileTable[y][x]
+    local unit_sel = tile_sel.unit
+    if (
+        not self.is_select and 
+        unit_sel ~= nil   and
+        unit_sel.owner == game.Game.active_player
+    ) then
+        self.is_select = true
+        tile_sel:select()
+        self.selected = {y = y, x = x, tile = tile_sel}
 
         -- find tiles unit could move to
-        local range = selectedTile.unit.range
+        local range = tile_sel.unit.range
         
         local function find_tile(yy, xx, rr, out)
             local this_tile = self.tileTable[yy][xx]
@@ -81,7 +86,7 @@ function Map:select(y, x)
             --  * TODO: illegal terrain
             if (
                 this_tile.unit and
-                this_tile.unit.owner ~= selectedTile.unit.owner
+                this_tile.unit.owner ~= tile_sel.unit.owner
             ) then
                 return
             end
@@ -131,11 +136,11 @@ function Map:select(y, x)
 end
 
 
-function Map:deSelect(y, x)
-    if self.isSelect then
-        self.selected.tile:deSelect()
+function Map:de_select(y, x)
+    if self.is_select then
+        self.selected.tile:de_select()
         self.selected = nil
-        self.isSelect = false
+        self.is_select = false
         
         -- deactivate movement overlay
         for k, _ in pairs(self.tiles_move) do
@@ -165,11 +170,11 @@ function Map:move_unit(y, x)
 
     local unit = self.selected.tile.unit
     self.tileTable[y][x].unit = unit
-    unit:deSelect()
+    unit:de_select()
     
     -- clear old tile
     self.selected.tile.unit = nil
-    self:deSelect(self.selected.y, self.selected.x)
+    self:de_select(self.selected.y, self.selected.x)
 end
 
 

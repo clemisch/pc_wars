@@ -7,7 +7,7 @@ function Tile:init(name, owner)
     self.name = name
     self.owner = owner or 0
     self.unit = nil
-    self.isSelect = false
+    self.is_select = false
     self.doOverlay = false
 end
 
@@ -61,16 +61,16 @@ function Tile:get_unit(unit)
 end
 
 function Tile:select()
-    self.isSelect = true
+    self.is_select = true
     if self.unit then
         self.unit:select()
     end
 end
 
-function Tile:deSelect()
-    self.isSelect = false
+function Tile:de_select()
+    self.is_select = false
     if self.unit then
-        self.unit:deSelect()
+        self.unit:de_select()
     end
 end
 

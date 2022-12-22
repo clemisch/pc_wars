@@ -26,18 +26,18 @@ function Unit:draw(y, x)
         Tilesets.units.spritesheet, 
         Tilesets.units.quads[self.name][self.owner],
         (x - 1) * 16 * SCALING,
-        (y - 1) * 16 * SCALING - (self.isSelect and SCALING*5 or 0),
+        (y - 1) * 16 * SCALING - (self.is_select and SCALING*5 or 0),
         0,
         SCALING
     )
 end
 
 function Unit:select()
-    self.isSelect = true
+    self.is_select = true
 end
 
-function Unit:deSelect()
-    self.isSelect = false
+function Unit:de_select()
+    self.is_select = false
 end
 
 

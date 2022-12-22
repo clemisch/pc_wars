@@ -8,7 +8,7 @@ function Cursor:init(map)
     self.map = map
     self.x = 1
     self.y = 1
-    self.isSelect = false
+    self.is_select = false
 end
 
 function Cursor:moveRel(y, x)
@@ -57,7 +57,7 @@ function Cursor:draw()
 end
 
 function Cursor:select()
-    if self.map.isSelect then
+    if self.map.is_select then
         self.map:move_unit(self.y, self.x)
     else
         self.map:select(self.y, self.x)
@@ -65,7 +65,7 @@ function Cursor:select()
 end
 
 function Cursor:deSelect()
-    self.map:deSelect(self.y, self.x)
+    self.map:de_select(self.y, self.x)
 end
 
 
