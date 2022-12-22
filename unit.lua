@@ -14,8 +14,11 @@ local unit_string_to_ing = Loader.groundStringToNum
 
 local Unit = Class.new()
 function Unit:init(name, owner, health)
+    assert(name)
+    assert(owner)
+
     self.name = name
-    self.owner = owner or 0
+    self.owner = owner
     self.health = health or 100
     self.range = unit_db[name].range
 end

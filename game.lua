@@ -16,6 +16,8 @@ function Game:enter(from, map, cursor)
     self.name = "Game"
     self.map = map
     self.cursor = cursor
+    self.active_player = 1
+    self.num_players = 3
 
     if DEBUG then
         print("Entering gamestate <Game>")
@@ -52,7 +54,8 @@ end
 function Game:keypressed(key)
     if 
         key == "p"      then Gamestate.push(pause.Pause) elseif
-        key == "escape" then love.event.quit()
+        key == "escape" then love.event.quit()           elseif 
+        key == "return" then self:next_player()
     end
 
     self.cursor:update(key)
@@ -63,6 +66,13 @@ function Game:resume(pre)
     if DEBUG then
         print("Resuming gamestate <Game>")
     end
+end
+
+
+function Game:next_player()
+    -- TODO: make owner 1-indexed (map is 0 atm)
+    self.active_player = (self.active_player % self.num_players) + 1
+    print(self.active_player)
 end
 
 
