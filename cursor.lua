@@ -41,7 +41,7 @@ function Cursor:update(key)
         key == 'd' then self:moveRel(0, 1)     elseif
         key == 'a' then self:moveRel(0, -1)    elseif
         key == 'k' then self:select()          elseif
-        key == 'l' then self:deSelect()
+        key == 'l' then self:de_select()
     end
 end
 
@@ -64,7 +64,7 @@ function Cursor:select()
     end
 end
 
-function Cursor:deSelect()
+function Cursor:de_select()
     self.map:de_select(self.y, self.x)
 end
 
