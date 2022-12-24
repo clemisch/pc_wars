@@ -104,6 +104,7 @@ function Map:select(y, x)
                 out[key] = rr
             end
             
+            -- return if there is no range left
             if rr == 0 then
                 return 
             end
