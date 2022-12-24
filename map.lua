@@ -1,9 +1,9 @@
-local Class = require('hump.class')
+local Class = require("hump.class")
 
-local loader = require('loader')
-local tile = require('tile')
-local unit = require('unit') 
-
+local loader = require("loader")
+local tile = require("tile")
+local unit = require("unit") 
+local utils = require("utils")
 
 
 local function coords_to_string(y, x)
@@ -22,25 +22,22 @@ function Map:init(name)
     self.name = name
     self.tileTable = {}
     self.is_select = false
-    local tStart = love.timer.getTime()
-    self:load(name)
-    local tStop = love.timer.getTime()
-    print(("Loaded level in %.2f ms"):format(1000 * (tStop - tStart)))
+    utils.timeit(self.load, {self, name}, "Level loader", "%.2f ms", 1000)
 end
 
 
 function Map:load(name)
     -- decode level files
-    local levelData = loader.loadLevel(name)
+    local level_data = loader.load_level(name)
 
     -- construct map of tiles and units from level data
-    for y, row in ipairs(levelData.ground) do
+    for y, row in ipairs(level_data.ground) do
         self.tileTable[y] = {}
         for x, tileStr in ipairs(row) do
-            local tileOwner = levelData.groundOwner[y][x]
-            local unitsOwner = levelData.unitsOwner[y][x]
+            local tileOwner = level_data.groundOwner[y][x]
+            local unitsOwner = level_data.unitsOwner[y][x]
             local tile = tile.Tile(tileStr, tileOwner)
-            local unitStr = levelData.units[y][x]
+            local unitStr = level_data.units[y][x]
 
             -- TODO: move this check into unit.Unit
             if unitStr then

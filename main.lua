@@ -15,7 +15,7 @@ TIME_START = love.timer.getTime()
 function love.load()
     DEBUG = true
 
-    local map = map.Map("testLevel")
+    local map = map.Map("level_test")
     local cursor = cursor.Cursor(map)
 
     Gamestate.registerEvents()
