@@ -16,7 +16,8 @@ function Menu:draw()
         100,
         'center',
         0,
-        1)
+        1
+    )
 end
 
 function Menu:keypressed(key)

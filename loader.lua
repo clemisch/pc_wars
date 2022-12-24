@@ -12,7 +12,8 @@ loader.groundNumToString = {
     [1] = 'factory',
     [2] = 'city',
     [3] = 'airport',
-    [4] = 'port',
+    [4] = 'seaport',
+    [5] = 'hq',
 }
 
 -- encode units with integers; define string names for readability

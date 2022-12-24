@@ -15,16 +15,20 @@ local function getQuad(y, x, sizeY, sizeX, img)
         (y - 1) * tilesize.y,
         sizeX * tilesize.x,
         sizeY * tilesize.y,
-        img:getDimensions())
+        img:getDimensions()
+    )
 end
 
 -- ground tileset
 local ground = {}
 ground.spritesheet = love.graphics.newImage('img/ground/0.png')
 ground.quadSpecs = {
-    factory = {y = 5, x = 6, sizeY = 2, sizeX = 1, hasOwner = true},
-    city    = {y = 3, x = 6, sizeY = 2, sizeX = 1, hasOwner = true},
-    grass   = {y = 2, x = 6, sizeY = 1, sizeX = 1},
+    grass   = {y = 2 , x = 6, sizeY = 1, sizeX = 1                 },
+    city    = {y = 3 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
+    factory = {y = 5 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
+    airport = {y = 7 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
+    seaport = {y = 9 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
+    hq      = {y = 11, x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
 }
 ground.quads = {}
 for name, spec in pairs(ground.quadSpecs) do
@@ -32,8 +36,9 @@ for name, spec in pairs(ground.quadSpecs) do
 
     -- if ground can be owned, loop over number of sprites
     if spec.hasOwner then
-        for i = 5, 0, -1 do 
-            ground.quads[name][i] = getQuad(spec.y, spec.x - i, spec.sizeY, spec.sizeX, ground.spritesheet)
+        ground.quads[name][0] = getQuad(spec.y, spec.x + 5, spec.sizeY, spec.sizeX, ground.spritesheet)
+        for i = 1, 5 do 
+            ground.quads[name][i] = getQuad(spec.y, spec.x + i - 1, spec.sizeY, spec.sizeX, ground.spritesheet)
         end
     
     -- if ground can not be owned, just set 0th sprite
@@ -54,9 +59,9 @@ units.quadSpecs = {
 units.quads = {}
 for name, spec in pairs(units.quadSpecs) do
     units.quads[name] = {}
-    for i = 0, 4 do 
+    for i = 1, 5 do 
         -- ground.quads[name][i] = getQuad(spec.y, spec.x - i, spec.sizeY, spec.sizeX, ground.spritesheet)
-        units.quads[name][i] = getQuad(spec.y + i, spec.x, spec.sizeY, spec.sizeX, units.spritesheet)
+        units.quads[name][i] = getQuad(spec.y + i - 1, spec.x, spec.sizeY, spec.sizeX, units.spritesheet)
     end
 end
 
