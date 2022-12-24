@@ -27,4 +27,4 @@ function Menu:keypressed(key)
 end
 
 
-return menu
+return Menu

@@ -7,6 +7,7 @@ Gamestate = require("hump.gamestate")
 -- global gamestate entities
 game = require("game")
 pause = require("pause")
+buymenu = require("buymenu")
 
 -- global start time used for animation
 TIME_START = love.timer.getTime()
