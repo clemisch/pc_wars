@@ -101,9 +101,8 @@ end
 
 
 function Game:next_player()
-    -- TODO: make owner 1-indexed (map is 0 atm)
     self.active_player = (self.active_player % self.num_players) + 1
-    print(self.active_player)
+    print("Active player:", self.active_player)
 end
 
 
