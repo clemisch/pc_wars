@@ -1,13 +1,14 @@
 -- `Pause` is a HUMP Gamestate
 local Pause = {}
 
+local log = require("log")
+log.level = LOGLEVEL
+
 local overlayWidth = 500
 local overlayHeight = 300
 
 function Pause:enter(from)
-    if DEBUG then
-        print("Entering gamestate <Pause>")
-    end
+    log.debug("Entering gamestate <Pause>")
 
     self.name = "Pause"
     self.from = from

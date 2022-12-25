@@ -15,8 +15,11 @@ function love.conf(t)
     t.window.height = HEIGHT_PIXELS
     t.window.width = WIDTH_PIXELS
 
-    -- debug flag
+    -- logging level
+    -- https://github.com/rxi/log.lua#readme
     DEBUG = true
+    LOGLEVEL = "trace"
+    LOGFILE = "logfile.txt"
     
     -- For Windows debugging
     t.console = true

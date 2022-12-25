@@ -1,6 +1,9 @@
 local Class = require('hump.class')
 local Tilesets = require('tilesets')
 
+local log = require("log")
+log.level = LOGLEVEL
+
 local Cursor = Class.new()
 function Cursor:init(map)
     assert(map)
@@ -24,10 +27,11 @@ end
 
 function Cursor:moveAbs(y, x)
     if y < 0 or y > HEIGHT_TILES then
-        error("y beyond bounds")
-    end
-    if x < 0 or x > WIDTH_TILES then
-        error("x beyond bounds")
+        log.error("y beyond bounds: " .. y)
+        return
+    elseif x < 0 or x > WIDTH_TILES then
+        log.error("x beyond bounds: " .. x)
+        return
     end
 
     self.y = y
@@ -36,12 +40,13 @@ end
 
 function Cursor:update(key)
     if  
-        key == 'w' then self:moveRel(-1, 0)    elseif
-        key == 's' then self:moveRel(1, 0)     elseif
-        key == 'd' then self:moveRel(0, 1)     elseif
-        key == 'a' then self:moveRel(0, -1)    elseif
-        key == 'k' then self:select()          elseif
-        key == 'l' then self:de_select()
+        key == "w" then self:moveRel(-1, 0)    elseif
+        key == "s" then self:moveRel(1, 0)     elseif
+        key == "d" then self:moveRel(0, 1)     elseif
+        key == "a" then self:moveRel(0, -1)    elseif
+        key == "k" then self:select()          elseif
+        key == "l" then self:de_select()       elseif
+        key == "e" then self.moveAbs(1000, 1000) 
     end
 end
 

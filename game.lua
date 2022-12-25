@@ -1,4 +1,5 @@
-local pprint = require("pprint")
+local log = require("log")
+log.level = LOGLEVEL
 
 
 local function text_center(rectX, rectY, rectWidth, rectHeight, text)
@@ -9,7 +10,6 @@ local function text_center(rectX, rectY, rectWidth, rectHeight, text)
 end
 
 local function text_right(y, text, is_bot)
-    
 	local font       = love.graphics.getFont()
 	local text_width  = font:getWidth(text)
 	local text_height = font:getHeight()
@@ -27,9 +27,7 @@ end
 local Game = {}
 
 function Game:init() 
-    if DEBUG then
-        print("Initializing gamestate <Game>")
-    end
+    log.debug("Initializing gamestate <Game>")
 end
 
 function Game:enter(from, map, cursor)
@@ -47,8 +45,8 @@ function Game:enter(from, map, cursor)
         self.player_money[i] = 3000
     end
 
+    log.debug("Entering gamestate <Game>")
     if DEBUG then
-        print("Entering gamestate <Game>")
         self.ACC = 0
         self.ACC_LIM = 0.5
         self.FPS = 1
@@ -86,7 +84,8 @@ function Game:keypressed(key)
     if 
         key == "p"      then Gamestate.push(pause.Pause) elseif
         key == "escape" then love.event.quit()           elseif 
-        key == "return" then self:next_player()
+        key == "return" then self:next_player()          elseif 
+        key == "r"      then reload()
     end
 
     self.cursor:update(key)
@@ -94,16 +93,16 @@ end
 
 
 function Game:resume(pre)
-    if DEBUG then
-        print("Resuming gamestate <Game>")
-    end
+    log.debug("Resuming gamestate <Game>")
 end
 
 
 function Game:next_player()
     self.active_player = (self.active_player % self.num_players) + 1
-    print("Active player:", self.active_player)
+    log.debug("Active player:", self.active_player)
 end
+
+
 
 
 return {

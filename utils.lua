@@ -1,6 +1,8 @@
 --- @module
 local utils = {}
 
+local log = require("log")
+log.level = LOGLEVEL
 
 function utils.timeit (fun, args, name, fmt, multiplier)
     local name = name or "Function"
@@ -11,7 +13,7 @@ function utils.timeit (fun, args, name, fmt, multiplier)
     local ret = fun(table.unpack(args))
     local t1 = love.timer.getTime()
     local dt = t1 - t0
-    print(("%s took " .. fmt):format(name, dt * multiplier))
+    log.debug(("%s took " .. fmt):format(name, dt * multiplier))
     return ret
 end
 

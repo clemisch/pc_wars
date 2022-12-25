@@ -7,9 +7,7 @@ end
 
 
 function BuyMenu:enter(from)
-    if DEBUG then
-        print("Initializing gamestate <BuyMenu>")
-    end
+    log.debug("Initializing gamestate <BuyMenu>")
 
     self.name = "BuyMenu"
     self.from = from
