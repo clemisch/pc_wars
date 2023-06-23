@@ -1,7 +1,7 @@
-local Class = require('hump.class')
-local Tilesets = require('tilesets')
+local Class = require("src.hump.class")
+local Tilesets = require("src.tilesets")
 
-local log = require("log")
+local log = require("src.log")
 log.level = LOGLEVEL
 
 local Cursor = Class.new()

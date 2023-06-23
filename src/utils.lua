@@ -1,7 +1,7 @@
 --- @module
 local utils = {}
 
-local log = require("log")
+local log = require("src.log")
 log.level = LOGLEVEL
 
 function utils.timeit (fun, args, name, fmt, multiplier)

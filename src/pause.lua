@@ -1,7 +1,7 @@
 -- `Pause` is a HUMP Gamestate
 local Pause = {}
 
-local log = require("log")
+local log = require("src.log")
 log.level = LOGLEVEL
 
 local overlayWidth = 500

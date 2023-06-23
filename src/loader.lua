@@ -58,7 +58,7 @@ for k,v in pairs(loader.unit_num_to_string) do
 end
 
 function loader.load_level(name)
-    local data_level = require("levels/" .. name)
+    local data_level = require("levels." .. name)
     
     local table_ground = {}
     for y, row in ipairs(data_level.ground) do

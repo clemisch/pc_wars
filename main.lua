@@ -1,13 +1,13 @@
-local map = require("map")
-local cursor = require("cursor")
+local map = require("src.map")
+local cursor = require("src.cursor")
 
 -- global gamestate handler
-Gamestate = require("hump.gamestate")
+Gamestate = require("src.hump.gamestate")
 
 -- global gamestate entities
-game = require("game")
-pause = require("pause")
-buymenu = require("buymenu")
+game = require("src.game")
+pause = require("src.pause")
+buymenu = require("src.buymenu")
 
 -- global start time used for animation
 TIME_START = love.timer.getTime()
