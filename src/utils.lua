@@ -14,6 +14,7 @@ function utils.timeit (fun, args, name, fmt, multiplier)
     local t1 = love.timer.getTime()
     local dt = t1 - t0
     log.debug(("%s took " .. fmt):format(name, dt * multiplier))
+    
     return ret
 end
 

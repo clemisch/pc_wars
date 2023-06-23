@@ -65,7 +65,7 @@ function Map:select(y, x)
     local unit_sel = tile_sel.unit
     if (
         not self.is_select and 
-        unit_sel ~= nil   and
+        unit_sel ~= nil    and
         unit_sel.owner == game.Game.active_player
     ) then
         self.is_select = true
