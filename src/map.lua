@@ -1,9 +1,9 @@
-local Class = require("hump.class")
+local Class = require("src.hump.class")
 
-local loader = require("loader")
-local tile = require("tile")
-local unit = require("unit") 
-local utils = require("utils")
+local loader = require("src.loader")
+local tile = require("src.tile")
+local unit = require("src.unit") 
+local utils = require("src.utils")
 
 
 local function coords_to_string(y, x)
@@ -65,7 +65,7 @@ function Map:select(y, x)
     local unit_sel = tile_sel.unit
     if (
         not self.is_select and 
-        unit_sel ~= nil   and
+        unit_sel ~= nil    and
         unit_sel.owner == game.Game.active_player
     ) then
         self.is_select = true

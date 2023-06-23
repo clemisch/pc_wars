@@ -1,4 +1,4 @@
-local log = require("log")
+local log = require("src.log")
 log.level = LOGLEVEL
 
 

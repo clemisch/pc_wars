@@ -1,5 +1,5 @@
-local Class = require('hump.class')
-local Tilesets = require('tilesets')
+local Class = require("src.hump.class")
+local Tilesets = require("src.tilesets")
 
 local Tile = Class.new()
 function Tile:init(name, owner)

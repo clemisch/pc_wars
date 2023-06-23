@@ -1,7 +1,7 @@
-local Class = require('hump.class')
-local Tilesets = require('tilesets')
-local Loader = require("loader")
-local unit_db = require("units/unit_db")
+local Class = require("src.hump.class")
+local Tilesets = require("src.tilesets")
+local Loader = require("src.loader")
+local unit_db = require("src.units.unit_db")
 
 
 local unit_int_to_string = Loader.unitNumToString

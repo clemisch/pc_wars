@@ -1,5 +1,5 @@
 -- set pixel perfect scaling 
-love.graphics.setDefaultFilter('nearest', 'nearest')
+love.graphics.setDefaultFilter("nearest", "nearest")
 
 -- container for all tilesets
 local tilesets = {}
@@ -21,7 +21,7 @@ end
 
 -- ground tileset
 local ground = {}
-ground.spritesheet = love.graphics.newImage('img/ground/0.png')
+ground.spritesheet = love.graphics.newImage("img/ground/0.png")
 ground.quadSpecs = {
     grass   = {y = 2 , x = 6, sizeY = 1, sizeX = 1                 },
     city    = {y = 3 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
@@ -50,7 +50,7 @@ end
 
 -- unit tileset
 local units = {}
-units.spritesheet = love.graphics.newImage('img/units/0.png')
+units.spritesheet = love.graphics.newImage("img/units/0.png")
 units.quadSpecs = {
     soldier_normal   = {y = 1, x = 1 , sizeY = 1, sizeX = 1},
     soldier_mech     = {y = 1, x = 2 , sizeY = 1, sizeX = 1},
@@ -92,13 +92,13 @@ end
 -- cursor tíleset
 local cursor = {}
 cursor.quads = {}
-cursor.spritesheet = love.graphics.newImage('img/cursor/cursor.png')
+cursor.spritesheet = love.graphics.newImage("img/cursor/cursor.png")
 cursor.quads.cursor = getQuad(1, 1, 1, 1, cursor.spritesheet)
 
 -- overlay tileset
 local overlays = {}
 overlays.quads = {}
-overlays.spritesheet = love.graphics.newImage('img/overlays/move.png')
+overlays.spritesheet = love.graphics.newImage("img/overlays/move.png")
 overlays.quads.overlays = getQuad(1, 1, 1, 1, overlays.spritesheet)
 
 
