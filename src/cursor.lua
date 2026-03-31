@@ -40,12 +40,12 @@ end
 
 function Cursor:update(key)
     if  
-        key == "w" then self:moveRel(-1, 0)    elseif
-        key == "s" then self:moveRel(1, 0)     elseif
-        key == "d" then self:moveRel(0, 1)     elseif
-        key == "a" then self:moveRel(0, -1)    elseif
-        key == "k" then self:select()          elseif
-        key == "l" then self:de_select()       elseif
+        key == "w" then self:moveRel(-1, 0)              elseif
+        key == "s" then self:moveRel(1, 0)               elseif
+        key == "d" then self:moveRel(0, 1)               elseif
+        key == "a" then self:moveRel(0, -1)              elseif
+        key == "k" then return self:select()             elseif
+        key == "l" then self:de_select()                 elseif
         key == "e" then self:moveAbs(1000, 1000) 
     end
 end
@@ -63,9 +63,9 @@ end
 
 function Cursor:select()
     if self.map.is_select then
-        self.map:move_unit(self.y, self.x)
+        return self.map:move_unit(self.y, self.x)
     else
-        self.map:select(self.y, self.x)
+        return self.map:select(self.y, self.x)
     end
 end
 

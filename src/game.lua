@@ -1,6 +1,8 @@
 local log = require("src.log")
 log.level = LOGLEVEL
 
+local unit_db = require("src.units.unit_db")
+
 
 local function text_center(rectX, rectY, rectWidth, rectHeight, text)
 	local font       = love.graphics.getFont()
@@ -89,7 +91,10 @@ function Game:keypressed(key)
         key == "r"      then reload()
     end
 
-    self.cursor:update(key)
+    local action = self.cursor:update(key)
+    if action and action.action == "open_buymenu" then
+        Gamestate.push(buymenu.BuyMenu, action.y, action.x)
+    end
 end
 
 
@@ -100,7 +105,29 @@ end
 
 function Game:next_player()
     self.active_player = (self.active_player % self.num_players) + 1
+    self.map:set_units_used(self.active_player, false)
     log.debug("Active player:", self.active_player)
+end
+
+function Game:build_unit(y, x, unit_name)
+    local data = unit_db[unit_name]
+    if not data then
+        return false
+    end
+
+    local cost = data.cost or 0
+    local funds = self.player_money[self.active_player]
+    if funds < cost then
+        return false
+    end
+
+    local ok = self.map:build_unit(y, x, unit_name, self.active_player)
+    if not ok then
+        return false
+    end
+
+    self.player_money[self.active_player] = funds - cost
+    return true
 end
 
 

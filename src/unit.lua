@@ -13,7 +13,7 @@ local unit_string_to_int = Loader.unit_string_to_num
 
 
 local Unit = Class.new()
-function Unit:init(name, owner, health)
+function Unit:init(name, owner, health, is_used)
     assert(name)
     assert(owner)
 
@@ -21,6 +21,7 @@ function Unit:init(name, owner, health)
     self.owner = owner
     self.health = health or 100
     self.range = unit_db[name].range
+    self.is_used = is_used or false
 end
 
 function Unit:draw(y, x)
@@ -41,6 +42,10 @@ end
 
 function Unit:de_select()
     self.is_select = false
+end
+
+function Unit:set_used(is_used)
+    self.is_used = is_used
 end
 
 

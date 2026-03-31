@@ -16,6 +16,10 @@ local function string_to_coords(str)
     return y, x
 end
 
+local function is_factory_tile(tile_obj)
+    return tile_obj and tile_obj.name == "factory"
+end
+
 
 local Map = Class.new()
 function Map:init(name)
@@ -64,16 +68,44 @@ function Map:set_game_state(game_state)
     self.game_state = game_state
 end
 
+function Map:get_tile(y, x)
+    return self.tileTable[y] and self.tileTable[y][x]
+end
+
+function Map:can_open_buymenu(y, x)
+    local tile_sel = self:get_tile(y, x)
+    local active_player = self.game_state and self.game_state.active_player
+
+    return (
+        not self.is_select and
+        tile_sel ~= nil and
+        tile_sel.unit == nil and
+        tile_sel.owner == active_player and
+        is_factory_tile(tile_sel)
+    )
+end
+
 
 function Map:select(y, x)
-    -- select unit if tile contains one
     local tile_sel = self.tileTable[y][x]
     local unit_sel = tile_sel.unit
     local active_player = self.game_state and self.game_state.active_player
+
+    if self:can_open_buymenu(y, x) then
+        return {
+            action = "open_buymenu",
+            y = y,
+            x = x,
+            tile = tile_sel,
+        }
+    end
+
+    -- select unit if tile contains one
     if (
         not self.is_select and 
         unit_sel ~= nil    and
-        unit_sel.owner == active_player
+        unit_sel.owner == active_player and
+        not unit_sel.is_used
     ) then
         self.is_select = true
         tile_sel:select()
@@ -176,10 +208,39 @@ function Map:move_unit(y, x)
     local unit = self.selected.tile.unit
     self.tileTable[y][x].unit = unit
     unit:de_select()
+    unit:set_used(true)
     
     -- clear old tile
     self.selected.tile.unit = nil
     self:de_select(self.selected.y, self.selected.x)
+end
+
+function Map:build_unit(y, x, unit_name, owner)
+    local tile_sel = self:get_tile(y, x)
+    if not tile_sel then
+        return false
+    end
+
+    if tile_sel.unit ~= nil then
+        return false
+    end
+
+    if tile_sel.owner ~= owner or not is_factory_tile(tile_sel) then
+        return false
+    end
+
+    tile_sel:set_unit(unit.Unit(unit_name, owner, 100, true))
+    return true
+end
+
+function Map:set_units_used(owner, is_used)
+    for _, row in ipairs(self.tileTable) do
+        for _, tile_obj in ipairs(row) do
+            if tile_obj.unit and tile_obj.unit.owner == owner then
+                tile_obj.unit:set_used(is_used)
+            end
+        end
+    end
 end
 
 
