@@ -6,6 +6,7 @@ local tilesets = {}
 
 -- size of sprite on spritesheets 
 local tilesize = {y = 16, x = 16}
+local ground_animation_step_seconds = 0.5
 
 local function getQuad(y, x, sizeY, sizeX, img)
     local sizeY = sizeY or 1
@@ -21,7 +22,12 @@ end
 
 -- ground tileset
 local ground = {}
-ground.spritesheet = love.graphics.newImage("img/ground/0.png")
+ground.animation_frames = {0, 1, 3, 4, 5, 6, 7, 8}
+ground.spritesheets = {}
+for i, frame in ipairs(ground.animation_frames) do
+    ground.spritesheets[i] = love.graphics.newImage(("img/ground/%i.png"):format(frame))
+end
+ground.spritesheet = ground.spritesheets[1]
 ground.quadSpecs = {
     grass   = {y = 2 , x = 6, sizeY = 1, sizeX = 1                 },
     city    = {y = 3 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
@@ -31,20 +37,33 @@ ground.quadSpecs = {
     hq      = {y = 11, x = 1, sizeY = 2, sizeX = 1, hasOwner = true},
 }
 ground.quads = {}
-for name, spec in pairs(ground.quadSpecs) do
-    ground.quads[name] = {}
+for frame_index, spritesheet in ipairs(ground.spritesheets) do
+    ground.quads[frame_index] = {}
+    for name, spec in pairs(ground.quadSpecs) do
+        ground.quads[frame_index][name] = {}
 
-    -- if ground can be owned, loop over number of sprites
-    if spec.hasOwner then
-        ground.quads[name][0] = getQuad(spec.y, spec.x + 5, spec.sizeY, spec.sizeX, ground.spritesheet)
-        for i = 1, 5 do 
-            ground.quads[name][i] = getQuad(spec.y, spec.x + i - 1, spec.sizeY, spec.sizeX, ground.spritesheet)
+        -- if ground can be owned, loop over number of sprites
+        if spec.hasOwner then
+            ground.quads[frame_index][name][0] = getQuad(spec.y, spec.x + 5, spec.sizeY, spec.sizeX, spritesheet)
+            for i = 1, 5 do
+                ground.quads[frame_index][name][i] = getQuad(spec.y, spec.x + i - 1, spec.sizeY, spec.sizeX, spritesheet)
+            end
+
+        -- if ground can not be owned, just set 0th sprite
+        else
+            ground.quads[frame_index][name][0] = getQuad(spec.y, spec.x, spec.sizeY, spec.sizeX, spritesheet)
         end
-    
-    -- if ground can not be owned, just set 0th sprite
-    else
-        ground.quads[name][0] = getQuad(spec.y, spec.x, spec.sizeY, spec.sizeX, ground.spritesheet)
     end
+end
+
+function ground:get_current_frame_index()
+    local elapsed = love.timer.getTime() - TIME_START
+    return math.floor(elapsed / ground_animation_step_seconds) % #self.spritesheets + 1
+end
+
+function ground:get_drawable(name, owner)
+    local frame_index = self:get_current_frame_index()
+    return self.spritesheets[frame_index], self.quads[frame_index][name][owner]
 end
 
 

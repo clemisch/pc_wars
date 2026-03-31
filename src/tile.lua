@@ -16,12 +16,12 @@ function Tile:__tostring()
 end
 
 function Tile:draw(y, x)
-    local quad = Tilesets.ground.quads[self.name][self.owner]
+    local spritesheet, quad = Tilesets.ground:get_drawable(self.name, self.owner)
     local _, _, _, height = quad:getViewport()
     local yOffset = (height / 16) - 1  -- for tilesets higher than 16px
 
     love.graphics.draw(
-        Tilesets.ground.spritesheet,
+        spritesheet,
         quad,
         (x - 1) * 16 * SCALING,
         (y - 1 - yOffset) * 16 * SCALING,
