@@ -4,8 +4,8 @@ local Loader = require("src.loader")
 local unit_db = require("src.units.unit_db")
 
 
-local unit_int_to_string = Loader.unitNumToString
-local unit_string_to_ing = Loader.groundStringToNum
+local unit_int_to_string = Loader.unit_num_to_string
+local unit_string_to_int = Loader.unit_string_to_num
 
 
 
