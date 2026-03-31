@@ -36,6 +36,7 @@ function Game:enter(from, map, cursor)
 
     self.name = "Game"
     self.map = map
+    self.map:set_game_state(self)
     self.cursor = cursor
     self.active_player = 1
     self.num_players = 3

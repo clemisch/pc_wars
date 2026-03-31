@@ -22,6 +22,7 @@ function Map:init(name)
     self.name = name
     self.tileTable = {}
     self.is_select = false
+    self.game_state = nil
     utils.timeit(self.load, {self, name}, "Level loader", "%.2f ms", 1000)
 end
 
@@ -59,14 +60,20 @@ function Map:draw()
 end
 
 
+function Map:set_game_state(game_state)
+    self.game_state = game_state
+end
+
+
 function Map:select(y, x)
     -- select unit if tile contains one
     local tile_sel = self.tileTable[y][x]
     local unit_sel = tile_sel.unit
+    local active_player = self.game_state and self.game_state.active_player
     if (
         not self.is_select and 
         unit_sel ~= nil    and
-        unit_sel.owner == game.Game.active_player
+        unit_sel.owner == active_player
     ) then
         self.is_select = true
         tile_sel:select()
