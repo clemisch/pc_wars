@@ -26,6 +26,7 @@ end
 
 function Unit:draw(y, x)
     -- draw the unit at tile y, x (lua indexing)
+    love.graphics.setColor(1, 1, 1, self.is_used and 0.6 or 1)
     love.graphics.draw(
         Tilesets.units.spritesheet, 
         Tilesets.units.quads[self.name][self.owner],
@@ -34,6 +35,7 @@ function Unit:draw(y, x)
         0,
         SCALING
     )
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Unit:select()
