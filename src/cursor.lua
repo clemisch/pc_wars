@@ -46,7 +46,7 @@ function Cursor:update(key)
         key == "a" then self:moveRel(0, -1)    elseif
         key == "k" then self:select()          elseif
         key == "l" then self:de_select()       elseif
-        key == "e" then self.moveAbs(1000, 1000) 
+        key == "e" then self:moveAbs(1000, 1000) 
     end
 end
 
