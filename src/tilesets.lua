@@ -61,6 +61,9 @@ for frame_index, spritesheet in ipairs(ground.spritesheets) do
         -- if ground can not be owned, just set 0th sprite
         else
             ground.quads[frame_index][name][0] = getQuad(spec.y, spec.x, spec.sizeY, spec.sizeX, spritesheet)
+            for i = 1, 5 do
+                ground.quads[frame_index][name][i] = ground.quads[frame_index][name][0]
+            end
         end
     end
 end
