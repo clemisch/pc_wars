@@ -13,8 +13,6 @@ buymenu = require("src.buymenu")
 TIME_START = love.timer.getTime()
 
 function love.load()
-    local x, y = love.graphics.inverseTransformPoint(0.5, 0.5)
-    print(x, y)
     local map = map.Map("level_test")
     local cursor = cursor.Cursor(map)
     Gamestate.registerEvents()

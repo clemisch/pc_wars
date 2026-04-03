@@ -16,8 +16,12 @@ local function string_to_coords(str)
     return y, x
 end
 
-local function is_factory_tile(tile_obj)
-    return tile_obj and tile_obj.name == "factory"
+local function is_build_tile(tile_obj)
+    return tile_obj and (
+        tile_obj.name == "factory" or
+        tile_obj.name == "airport" or
+        tile_obj.name == "seaport"
+    )
 end
 
 
@@ -81,7 +85,7 @@ function Map:can_open_buymenu(y, x)
         tile_sel ~= nil and
         tile_sel.unit == nil and
         tile_sel.owner == active_player and
-        is_factory_tile(tile_sel)
+        is_build_tile(tile_sel)
     )
 end
 
@@ -225,7 +229,7 @@ function Map:build_unit(y, x, unit_name, owner)
         return false
     end
 
-    if tile_sel.owner ~= owner or not is_factory_tile(tile_sel) then
+    if tile_sel.owner ~= owner or not is_build_tile(tile_sel) then
         return false
     end
 

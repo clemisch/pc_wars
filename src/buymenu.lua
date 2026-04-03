@@ -22,6 +22,22 @@ local BUILD_OPTIONS = {
         "flak_rocket",
         "rocket",
     },
+    airport = {
+        "heli_tp",
+        "heli_attack",
+        "plane_fighter",
+        "plane_bomber",
+        "plane_stealth",
+        "bomb",
+    },
+    seaport = {
+        "ship_robot",
+        "ship_tp",
+        "ship_destroyer",
+        "ship_submarine",
+        "ship_battle",
+        "ship_carrier",
+    },
 }
 
 local function format_unit_name(name)
