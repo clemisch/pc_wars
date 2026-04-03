@@ -8,12 +8,21 @@ string identifiers, which in turn are used in other parts of this program.
 local loader = {}
 
 loader.ground_num_to_string = {
-    [0] = "grass",
-    [1] = "factory",
-    [2] = "city",
-    [3] = "airport",
-    [4] = "seaport",
-    [5] = "hq",
+   [ 0] = "grass",
+   [ 1] = "factory",
+   [ 2] = "city",
+   [ 3] = "airport",
+   [ 4] = "seaport",
+   [ 5] = "hq",
+   [ 6] = "water",
+   [ 7] = "beach_n",
+   [ 8] = "beach_e",
+   [ 9] = "beach_s",
+   [10] = "beach_w",
+   [11] = "beach_nw",
+   [12] = "beach_ne",
+   [13] = "beach_se",
+   [14] = "beach_sw",
 }
 
 -- encode units with integers; define string names for readability

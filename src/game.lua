@@ -88,7 +88,7 @@ function Game:keypressed(key)
         key == "p"      then Gamestate.push(pause.Pause) elseif
         key == "escape" then love.event.quit()           elseif 
         key == "return" then self:next_player()          elseif 
-        key == "r"      then reload()
+        key == "r"      then love.event.quit("restart")
     end
 
     local action = self.cursor:update(key)
