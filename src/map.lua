@@ -24,6 +24,34 @@ local function is_build_tile(tile_obj)
     )
 end
 
+local function is_ship_unit(unit_obj)
+    return unit_obj and unit_obj.name:match("^ship_") ~= nil
+end
+
+local function is_beach_tile(tile_obj)
+    return tile_obj and tile_obj.name:match("^beach_") ~= nil
+end
+
+local function can_unit_move_on_tile(unit_obj, tile_obj)
+    if not unit_obj or not tile_obj then
+        return false
+    end
+
+    if not is_ship_unit(unit_obj) then
+        return true
+    end
+
+    if tile_obj.name == "water" or tile_obj.name == "seaport" then
+        return true
+    end
+
+    if unit_obj.name == "ship_tp" and is_beach_tile(tile_obj) then
+        return true
+    end
+
+    return false
+end
+
 
 local Map = Class.new()
 function Map:init(name)
@@ -123,11 +151,15 @@ function Map:select(y, x)
 
             -- abort if move to/through tile is illegal
             --  * enemy unit
-            --  * TODO: illegal terrain
+            --  * illegal terrain
             if (
                 this_tile.unit and
                 this_tile.unit.owner ~= tile_sel.unit.owner
             ) then
+                return
+            end
+
+            if not can_unit_move_on_tile(tile_sel.unit, this_tile) then
                 return
             end
 
