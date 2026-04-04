@@ -6,7 +6,7 @@ local tilesets = {}
 
 -- size of sprite on spritesheets 
 local tilesize = {y = 16, x = 16}
-local ground_animation_step_seconds = 0.7
+local ground_animation_step_seconds = 0.3
 
 local function getQuad(y, x, sizeY, sizeX, img)
     local sizeY = sizeY or 1
