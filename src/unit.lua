@@ -3,13 +3,8 @@ local Tilesets = require("src.tilesets")
 local Loader = require("src.loader")
 local unit_db = require("src.units.unit_db")
 
-
 local unit_int_to_string = Loader.unit_num_to_string
 local unit_string_to_int = Loader.unit_string_to_num
-
-
-
-
 
 
 local Unit = Class.new()

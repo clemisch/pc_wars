@@ -94,6 +94,8 @@ function Game:keypressed(key)
     local action = self.cursor:update(key)
     if action and action.action == "open_buymenu" then
         Gamestate.push(buymenu.BuyMenu, action.y, action.x)
+    elseif action and action.action == "open_actionmenu" then
+        Gamestate.push(actionmenu.ActionMenu, action.y, action.x)
     end
 end
 
@@ -128,6 +130,10 @@ function Game:build_unit(y, x, unit_name)
 
     self.player_money[self.active_player] = funds - cost
     return true
+end
+
+function Game:wait_action(y, x)
+    return self.map:wait_unit(y, x)
 end
 
 

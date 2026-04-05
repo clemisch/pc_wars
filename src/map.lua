@@ -226,29 +226,51 @@ function Map:de_select(y, x)
 
 end
 
+function Map:can_wait_at(y, x)
+    if not self.is_select or not self.selected then
+        return false
+    end
 
-function Map:move_unit(y, x)
-    --[[
-    Try to move selected unit to (y, x). 
-    New tile must be empty and within movement range.
-    --]]
-    if self.tileTable[y][x].unit then
-        return
+    if y == self.selected.y and x == self.selected.x then
+        return true
+    end
+
+    local tile_target = self:get_tile(y, x)
+    if not tile_target or tile_target.unit then
+        return false
     end
 
     local key = coords_to_string(y, x)
-    if not self.tiles_move[key] then
+    return self.tiles_move and self.tiles_move[key] ~= nil
+end
+
+function Map:move_unit(y, x)
+    if not self:can_wait_at(y, x) then
         return
     end
 
+    return {
+        action = "open_actionmenu",
+        y = y,
+        x = x,
+    }
+end
+
+function Map:wait_unit(y, x)
+    if not self:can_wait_at(y, x) then
+        return false
+    end
+
     local unit = self.selected.tile.unit
-    self.tileTable[y][x].unit = unit
+    if y ~= self.selected.y or x ~= self.selected.x then
+        self.tileTable[y][x].unit = unit
+        self.selected.tile.unit = nil
+    end
+
     unit:de_select()
     unit:set_used(true)
-    
-    -- clear old tile
-    self.selected.tile.unit = nil
     self:de_select(self.selected.y, self.selected.x)
+    return true
 end
 
 function Map:build_unit(y, x, unit_name, owner)
