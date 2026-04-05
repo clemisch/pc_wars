@@ -3,8 +3,6 @@ log.level = LOGLEVEL
 
 local ActionMenu = {}
 
-local OPTIONS = {"wait"}
-
 local function clamp(value, min_value, max_value)
     return math.max(min_value, math.min(max_value, value))
 end
@@ -22,7 +20,7 @@ function ActionMenu:enter(from, y, x)
     self.y = y
     self.x = x
     self.cursor = 1
-    self.options = OPTIONS
+    self.options = self.game:get_actions_at(y, x)
 end
 
 function ActionMenu:update(dt)
@@ -85,6 +83,8 @@ function ActionMenu:keypressed(key)
     local option_name = self.options[self.cursor]
     if option_name == "wait" and self.game:wait_action(self.y, self.x) then
         Gamestate.pop()
+    elseif option_name == "attack" then
+        self.game:attack_action(self.y, self.x)
     end
 end
 

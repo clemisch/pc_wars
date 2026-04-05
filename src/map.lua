@@ -5,6 +5,8 @@ local tile = require("src.tile")
 local unit = require("src.unit") 
 local utils = require("src.utils")
 
+local log = require("src.log")
+log.level = LOGLEVEL
 
 local function coords_to_string(y, x)
     return string.format("%i,%i", y, x)
@@ -47,6 +49,25 @@ local function can_unit_move_on_tile(unit_obj, tile_obj)
 
     if unit_obj.name == "ship_tp" and is_beach_tile(tile_obj) then
         return true
+    end
+
+    return false
+end
+
+local function has_enemy_neighbor(tile_table, y, x, owner)
+    local neighbors = {
+        {y = y - 1, x = x},
+        {y = y + 1, x = x},
+        {y = y, x = x - 1},
+        {y = y, x = x + 1},
+    }
+
+    for _, coords in ipairs(neighbors) do
+        local row = tile_table[coords.y]
+        local tile_obj = row and row[coords.x]
+        if tile_obj and tile_obj.unit and tile_obj.unit.owner ~= owner then
+            return true
+        end
     end
 
     return false
@@ -266,6 +287,24 @@ function Map:move_unit(y, x)
     }
 end
 
+function Map:get_actions_at(y, x)
+    if not self:can_wait_at(y, x) then
+        return {}
+    end
+
+    local unit_obj = self.selected and self.selected.tile and self.selected.tile.unit
+    if not unit_obj then
+        return {}
+    end
+
+    local actions = {"wait"}
+    if has_enemy_neighbor(self.tileTable, y, x, unit_obj.owner) then
+        table.insert(actions, "attack")
+    end
+
+    return actions
+end
+
 function Map:wait_unit(y, x)
     if not self:can_wait_at(y, x) then
         return false
@@ -281,6 +320,15 @@ function Map:wait_unit(y, x)
     unit:set_used(true)
     self:de_select(self.selected.y, self.selected.x)
     return true
+end
+
+function Map:attack_unit(y, x)
+    if not self:can_wait_at(y, x) then
+        return false
+    end
+
+    log.debug("Attack is not implemented yet")
+    return false
 end
 
 function Map:build_unit(y, x, unit_name, owner)

@@ -136,6 +136,14 @@ function Game:wait_action(y, x)
     return self.map:wait_unit(y, x)
 end
 
+function Game:attack_action(y, x)
+    return self.map:attack_unit(y, x)
+end
+
+function Game:get_actions_at(y, x)
+    return self.map:get_actions_at(y, x)
+end
+
 
 
 
