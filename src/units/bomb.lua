@@ -1,7 +1,7 @@
 --- @module
 local bomb = {}
 
-bomb.range = 3
+bomb.movement = 3
 bomb.cost = 3000
 
 

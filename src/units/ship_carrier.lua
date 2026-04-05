@@ -1,7 +1,7 @@
 --- @module
 local ship_carrier = {}
 
-ship_carrier.range = 3
+ship_carrier.movement = 3
 ship_carrier.cost = 3000
 
 

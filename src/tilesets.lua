@@ -85,8 +85,8 @@ units.spritesheet = love.graphics.newImage("img/units/0.png")
 units.quadSpecs = {
     soldier_normal   = {y = 1, x = 1 , sizeY = 1, sizeX = 1},
     soldier_mech     = {y = 1, x = 2 , sizeY = 1, sizeX = 1},
-    soldier_tp       = {y = 1, x = 3 , sizeY = 1, sizeX = 1},
     slime            = {y = 1, x = 4 , sizeY = 1, sizeX = 1},
+    tank_tp          = {y = 1, x = 3 , sizeY = 1, sizeX = 1},
     tank_light       = {y = 1, x = 5 , sizeY = 1, sizeX = 1},
     tank_medium      = {y = 1, x = 6 , sizeY = 1, sizeX = 1},
     tank_heavy       = {y = 1, x = 7 , sizeY = 1, sizeX = 1},

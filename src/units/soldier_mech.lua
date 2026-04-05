@@ -1,8 +1,20 @@
 --- @module
-local soldierMech = {}
+local soldier_mech = {}
 
-soldierMech.range = 2
-soldierMech.cost = 3000
+soldier_mech.type = "inf"
+soldier_mech.lp = 150
+soldier_mech.hardness = 0
+
+soldier_mech.att_soft = 65
+soldier_mech.att_hard = 45
+soldier_mech.att_air = 35
+soldier_mech.range = 2
+
+soldier_mech.movement = 2
+soldier_mech.moveaction = true
+
+soldier_mech.cost = 3000
 
 
-return soldierMech
+
+return soldier_mech

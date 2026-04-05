@@ -8,7 +8,7 @@ function Tile:init(name, owner)
     self.owner = owner or 0
     self.unit = nil
     self.is_select = false
-    self.doOverlay = false
+    self.do_overlay = false
 end
 
 function Tile:__tostring()
@@ -29,7 +29,7 @@ function Tile:draw(y, x)
         SCALING
     )
 
-    if self.doOverlay then
+    if self.do_overlay then
         -- white overlay
         local overlay = Tilesets.overlays.quads.overlays
         love.graphics.draw(
@@ -42,7 +42,7 @@ function Tile:draw(y, x)
         )
         -- number of moves to get this tile
         love.graphics.print(
-            {{0, 0, 0}, tostring(self.range)}, 
+            {{0, 0, 0}, tostring(self.move_range)}, 
             ((x - 1) * 16 + 6) * SCALING, 
             ((y - 1) * 16 + 6) * SCALING,
             0, 2

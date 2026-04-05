@@ -1,7 +1,7 @@
 --- @module
 local plane_fighter = {}
 
-plane_fighter.range = 3
+plane_fighter.movement = 3
 plane_fighter.cost = 3000
 
 

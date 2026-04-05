@@ -1,7 +1,7 @@
 --- @module
 local heli_attack = {}
 
-heli_attack.range = 3
+heli_attack.movement = 3
 heli_attack.cost = 3000
 
 

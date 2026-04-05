@@ -1,7 +1,7 @@
 --- @module
 local tank_light = {}
 
-tank_light.range = 5
+tank_light.movement = 5
 tank_light.cost = 2500
 
 

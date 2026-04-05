@@ -1,7 +1,7 @@
 --- @module
 local artillery_rocket = {}
 
-artillery_rocket.range = 3
+artillery_rocket.movement = 3
 artillery_rocket.cost = 3000
 
 

@@ -1,7 +1,7 @@
 --- @module
 local flak = {}
 
-flak.range = 3
+flak.movement = 3
 flak.cost = 3000
 
 

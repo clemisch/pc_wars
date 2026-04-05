@@ -9,8 +9,8 @@ local BUILD_OPTIONS = {
     factory = {
         "soldier_normal",
         "soldier_mech",
-        "soldier_tp",
         "slime",
+        "tank_tp",
         "tank_light",
         "tank_medium",
         "tank_heavy",

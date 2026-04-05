@@ -144,8 +144,9 @@ function Map:select(y, x)
         self.selected = {y = y, x = x, tile = tile_sel}
 
         -- find tiles unit could move to
-        local range = tile_sel.unit.range
-        
+        assert(tile_sel.unit.movement, tile_sel.unit.name)
+        local move_range = tile_sel.unit.movement
+
         local function find_tile(yy, xx, rr, out)
             local this_tile = self.tileTable[yy][xx]
 
@@ -196,13 +197,13 @@ function Map:select(y, x)
         end
         
         self.tiles_move = {}
-        find_tile(y, x, range, self.tiles_move)
+        find_tile(y, x, move_range, self.tiles_move)
 
         -- activate overlay over tiles unit could move to
         for k, rr in pairs(self.tiles_move) do
             local y, x = string_to_coords(k)
-            self.tileTable[y][x].doOverlay = true
-            self.tileTable[y][x].range = range - rr
+            self.tileTable[y][x].do_overlay = true
+            self.tileTable[y][x].move_range = move_range - rr
         end
     
     end
@@ -218,8 +219,8 @@ function Map:de_select(y, x)
         -- deactivate movement overlay
         for k, _ in pairs(self.tiles_move) do
             local y, x = string_to_coords(k)
-            self.tileTable[y][x].doOverlay = false
-            self.tileTable[y][x].range = nil
+            self.tileTable[y][x].do_overlay = false
+            self.tileTable[y][x].movement = nil
             self.tiles_move = nil
         end
     end

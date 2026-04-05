@@ -6,8 +6,8 @@ unit_db.soldier_normal = require("src.units.soldier_normal")
 unit_db.soldier_mech   = require("src.units.soldier_mech")
 
 -- tanks
-unit_db.soldier_tp       = require("src.units.soldier_tp")
 unit_db.slime            = require("src.units.slime")
+unit_db.tank_tp          = require("src.units.tank_tp")
 unit_db.tank_light       = require("src.units.tank_light")
 unit_db.tank_medium      = require("src.units.tank_medium")
 unit_db.tank_heavy       = require("src.units.tank_heavy")

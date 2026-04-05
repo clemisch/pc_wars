@@ -1,7 +1,7 @@
 --- @module
 local slime = {}
 
-slime.range = 3
+slime.movement = 3
 slime.cost = 3000
 
 
