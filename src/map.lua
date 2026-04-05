@@ -88,14 +88,17 @@ end
 
 
 function Map:draw()
+    -- first draw ground/buildings
     for y, row in ipairs(self.tileTable) do
         for x, tile in ipairs(row) do
-            tile:draw(y, x)
+            tile:draw_ground(y, x)
         end
     end
 
+    -- then draw overlay and units
     for y, row in ipairs(self.tileTable) do
         for x, tile in ipairs(row) do
+            tile:draw_overlay(y, x)
             tile:draw_unit(y, x)
         end
     end
