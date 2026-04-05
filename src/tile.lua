@@ -16,6 +16,11 @@ function Tile:__tostring()
 end
 
 function Tile:draw(y, x)
+    self:draw_ground(y, x)
+    self:draw_overlay(y, x)
+end
+
+function Tile:draw_ground(y, x)
     local spritesheet, quad = Tilesets.ground:get_drawable(self.name, self.owner)
     local _, _, _, height = quad:getViewport()
     local yOffset = (height / 16) - 1  -- for tilesets higher than 16px
@@ -28,7 +33,9 @@ function Tile:draw(y, x)
         0,
         SCALING
     )
+end
 
+function Tile:draw_overlay(y, x)
     if self.do_overlay then
         -- white overlay
         local overlay = Tilesets.overlays.quads.overlays
@@ -48,7 +55,9 @@ function Tile:draw(y, x)
             0, 2
         )
     end
+end
 
+function Tile:draw_unit(y, x)
     if self.unit then
         self.unit:draw(y, x)
     end

@@ -93,6 +93,12 @@ function Map:draw()
             tile:draw(y, x)
         end
     end
+
+    for y, row in ipairs(self.tileTable) do
+        for x, tile in ipairs(row) do
+            tile:draw_unit(y, x)
+        end
+    end
 end
 
 
