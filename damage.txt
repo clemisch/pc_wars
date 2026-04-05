@@ -1,0 +1,10 @@
+soft_dmg = att_soft * hp / hp_max * (1 - hardness)
+hard_dmg = att_hard * hp / hp_max * hardness
+factor_terrain = 1 - (cover_terrain / 5)
+factor_rand = uniform(0.9, 1.1)
+dmg = factor_rand * factor_terrain * (soft_dmg + hard_dmg)
+
+att_soft, att_hard from attacker
+hp, hp_max from attacker
+hardness from defender
+cover_terrain from defender
