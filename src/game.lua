@@ -23,6 +23,17 @@ local function text_right(y, text, is_bot)
 	love.graphics.print({{0, 0, 0}, text}, WIDTH_PIXELS, y, 0, 1, 1, text_width, -y_offset)
 end
 
+local function text_left(y, text, is_bot)
+	local font = love.graphics.getFont()
+	local text_height = font:getHeight()
+    local y_offset = 0
+    if is_bot then
+        y_offset = y_offset - text_height
+    end
+
+	love.graphics.print({{0, 0, 0}, text}, 0, y, 0, 1, 1, 0, -y_offset)
+end
+
 
 
 -- `Game` is a HUMP Gamestate
@@ -74,6 +85,12 @@ function Game:draw()
 
     text_right(HEIGHT_PIXELS, ("Active player: %i"):format(self.active_player), true)
     text_right(0, ("Funds: %i"):format(self.player_money[self.active_player]))
+
+    local cursor_tile = self.map:get_tile(self.cursor.y, self.cursor.x)
+    local unit_obj = cursor_tile and cursor_tile.unit
+    if unit_obj then
+        text_left(HEIGHT_PIXELS, ("LP: %i/%i"):format(unit_obj.lp, unit_obj.max_lp), true)
+    end
 
     if DEBUG then
         local s = ("%.1f"):format(self.FPS)
