@@ -10,6 +10,8 @@ ship_destroyer.att_hard = 70
 ship_destroyer.att_air = 50
 ship_destroyer.range = 1
 ship_destroyer.direct_fire = true
+ship_destroyer.can_build = true
+ship_destroyer.producer = "seaport"
 
 ship_destroyer.movement = 5
 ship_destroyer.moveaction = true

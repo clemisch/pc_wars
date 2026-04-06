@@ -10,6 +10,8 @@ heli_attack.att_hard = 55
 heli_attack.att_air = 45
 heli_attack.range = 1
 heli_attack.direct_fire = true
+heli_attack.can_build = true
+heli_attack.producer = "airport"
 
 heli_attack.movement = 5
 heli_attack.moveaction = true

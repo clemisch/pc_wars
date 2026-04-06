@@ -10,6 +10,8 @@ rocket.att_hard = 80
 rocket.att_air = 0
 rocket.range = 1
 rocket.direct_fire = true
+rocket.can_build = false
+rocket.producer = "airport"
 
 rocket.movement = 5
 rocket.moveaction = true

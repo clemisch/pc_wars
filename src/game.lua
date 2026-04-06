@@ -134,6 +134,15 @@ function Game:build_unit(y, x, unit_name)
         return false
     end
 
+    local tile = self.map:get_tile(y, x)
+    if not tile then
+        return false
+    end
+
+    if not data.can_build or data.producer ~= tile.name then
+        return false
+    end
+
     local cost = data.cost or 0
     local funds = self.player_money[self.active_player]
     if funds < cost then

@@ -10,6 +10,8 @@ tank_light.att_hard = 80
 tank_light.att_air = 0
 tank_light.range = 1
 tank_light.direct_fire = true
+tank_light.can_build = true
+tank_light.producer = "factory"
 
 tank_light.movement = 5
 tank_light.moveaction = true

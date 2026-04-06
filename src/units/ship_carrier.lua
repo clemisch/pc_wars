@@ -10,6 +10,8 @@ ship_carrier.att_hard = 0
 ship_carrier.att_air = 0
 ship_carrier.range = 1
 ship_carrier.direct_fire = true
+ship_carrier.can_build = true
+ship_carrier.producer = "seaport"
 
 ship_carrier.movement = 5
 ship_carrier.moveaction = true

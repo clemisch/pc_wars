@@ -10,6 +10,8 @@ plane_stealth.att_hard = 80
 plane_stealth.att_air = 0
 plane_stealth.range = 1
 plane_stealth.direct_fire = true
+plane_stealth.can_build = false
+plane_stealth.producer = "airport"
 
 plane_stealth.movement = 5
 plane_stealth.moveaction = true

@@ -10,6 +10,8 @@ heli_tp.att_hard = 0
 heli_tp.att_air = 0
 heli_tp.range = 1
 heli_tp.direct_fire = true
+heli_tp.can_build = true
+heli_tp.producer = "airport"
 
 heli_tp.movement = 5
 heli_tp.moveaction = true

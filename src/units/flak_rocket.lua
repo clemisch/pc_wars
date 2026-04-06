@@ -10,6 +10,8 @@ flak_rocket.att_hard = 15
 flak_rocket.att_air = 0
 flak_rocket.range = 3
 flak_rocket.direct_fire = true
+flak_rocket.can_build = true
+flak_rocket.producer = "factory"
 
 flak_rocket.movement = 5
 flak_rocket.moveaction = false

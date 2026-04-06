@@ -10,6 +10,8 @@ flak.att_hard = 15
 flak.att_air = 0
 flak.range = 1
 flak.direct_fire = true
+flak.can_build = true
+flak.producer = "factory"
 
 flak.movement = 5
 flak.moveaction = true

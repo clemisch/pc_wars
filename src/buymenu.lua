@@ -5,41 +5,6 @@ local unit_db = require("src.units.unit_db")
 
 local BuyMenu = {}
 
-local BUILD_OPTIONS = {
-    factory = {
-        "soldier_normal",
-        "soldier_mech",
-        "slime",
-        "tank_tp",
-        "tank_light",
-        "tank_medium",
-        "tank_heavy",
-        "tank_ultra",
-        "tank_laser",
-        "artillery",
-        "artillery_rocket",
-        "flak",
-        "flak_rocket",
-        "rocket",
-    },
-    airport = {
-        "heli_tp",
-        "heli_attack",
-        "plane_fighter",
-        "plane_bomber",
-        "plane_stealth",
-        "bomb",
-    },
-    seaport = {
-        "ship_robot",
-        "ship_tp",
-        "ship_destroyer",
-        "ship_submarine",
-        "ship_battle",
-        "ship_carrier",
-    },
-}
-
 local function format_unit_name(name)
     return (name:gsub("_", " "):gsub("(%a)([%w']*)", function(first, rest)
         return first:upper() .. rest
@@ -56,6 +21,23 @@ local function get_visible_window(cursor, total_options, max_rows)
     return first_row, last_row
 end
 
+local function get_build_options(producer)
+    local options = {}
+
+    for unit_name, data in pairs(unit_db) do
+        if (
+            type(data) == "table" and
+            data.can_build and
+            data.producer == producer
+        ) then
+            table.insert(options, unit_name)
+        end
+    end
+
+    table.sort(options)
+    return options
+end
+
 function BuyMenu:enter(from, y, x)
     log.debug("Entering gamestate <BuyMenu>")
 
@@ -69,7 +51,7 @@ function BuyMenu:enter(from, y, x)
 
     local tile = self.map:get_tile(y, x)
     self.tile = tile
-    self.options = BUILD_OPTIONS[tile.name] or {}
+    self.options = get_build_options(tile.name)
 end
 
 function BuyMenu:update(dt)

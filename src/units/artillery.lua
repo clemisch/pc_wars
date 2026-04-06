@@ -10,6 +10,8 @@ artillery.att_hard = 55
 artillery.att_air = 0
 artillery.range = {1, 2}
 artillery.direct_fire = false
+artillery.can_build = true
+artillery.producer = "factory"
 
 artillery.movement = 3
 artillery.moveaction = false

@@ -10,6 +10,8 @@ plane_fighter.att_hard = 0
 plane_fighter.att_air = 100
 plane_fighter.range = 1
 plane_fighter.direct_fire = true
+plane_fighter.can_build = true
+plane_fighter.producer = "airport"
 
 plane_fighter.movement = 5
 plane_fighter.moveaction = true

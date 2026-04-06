@@ -10,6 +10,8 @@ bomb.att_hard = 100
 bomb.att_air = 0
 bomb.range = 1
 bomb.direct_fire = true
+bomb.can_build = false
+bomb.producer = "factory"
 
 bomb.movement = 5
 bomb.moveaction = true

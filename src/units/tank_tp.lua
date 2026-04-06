@@ -10,6 +10,8 @@ tank_tp.att_hard = 0
 tank_tp.att_air = 0
 tank_tp.range = 1
 tank_tp.direct_fire = true
+tank_tp.can_build = true
+tank_tp.producer = "factory"
 
 tank_tp.movement = 6
 tank_tp.moveaction = true

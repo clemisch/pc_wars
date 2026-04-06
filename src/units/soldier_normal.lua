@@ -10,6 +10,8 @@ soldier_normal.att_hard = 0
 soldier_normal.att_air = 10
 soldier_normal.range = 1
 soldier_normal.direct_fire = true
+soldier_normal.can_build = true
+soldier_normal.producer = "factory"
 
 soldier_normal.movement = 3
 soldier_normal.moveaction = true
