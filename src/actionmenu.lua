@@ -72,6 +72,7 @@ function ActionMenu:keypressed(key)
     end
 
     if key == "l" then
+        self.game:cancel_action_preview()
         Gamestate.pop()
         return
     end

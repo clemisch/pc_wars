@@ -107,6 +107,17 @@ function Map:load(name)
     end
 end
 
+function Map:set_move_overlay_visible(is_visible)
+    if not self.tiles_move then
+        return
+    end
+
+    for key, _ in pairs(self.tiles_move) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_overlay = is_visible
+    end
+end
+
 
 function Map:draw()
     -- first draw ground/buildings
@@ -242,15 +253,18 @@ end
 
 function Map:de_select(y, x)
     if self.is_select then
+        self:cancel_action_preview()
         self.selected.tile:de_select()
         self.selected = nil
         self.is_select = false
         
         -- deactivate movement overlay
-        for k, _ in pairs(self.tiles_move) do
-            local y, x = string_to_coords(k)
-            self.tileTable[y][x].do_overlay = false
-            self.tileTable[y][x].movement = nil
+        if self.tiles_move then
+            for k, _ in pairs(self.tiles_move) do
+                local y, x = string_to_coords(k)
+                self.tileTable[y][x].do_overlay = false
+                self.tileTable[y][x].move_range = nil
+            end
             self.tiles_move = nil
         end
     end
@@ -260,6 +274,10 @@ end
 function Map:can_wait_at(y, x)
     if not self.is_select or not self.selected then
         return false
+    end
+
+    if self.preview then
+        return y == self.preview.y and x == self.preview.x
     end
 
     if y == self.selected.y and x == self.selected.x then
@@ -275,8 +293,50 @@ function Map:can_wait_at(y, x)
     return self.tiles_move and self.tiles_move[key] ~= nil
 end
 
-function Map:move_unit(y, x)
+function Map:begin_action_preview(y, x)
     if not self:can_wait_at(y, x) then
+        return false
+    end
+
+    if self.preview then
+        return self.preview.y == y and self.preview.x == x
+    end
+
+    local unit_obj = self.selected.tile.unit
+    self.preview = {
+        from_y = self.selected.y,
+        from_x = self.selected.x,
+        y = y,
+        x = x,
+        unit = unit_obj,
+    }
+
+    if y ~= self.selected.y or x ~= self.selected.x then
+        self.tileTable[y][x].unit = unit_obj
+        self.selected.tile.unit = nil
+    end
+
+    self:set_move_overlay_visible(false)
+    return true
+end
+
+function Map:cancel_action_preview()
+    if not self.preview then
+        return false
+    end
+
+    if self.preview.y ~= self.preview.from_y or self.preview.x ~= self.preview.from_x then
+        self.selected.tile.unit = self.preview.unit
+        self.tileTable[self.preview.y][self.preview.x].unit = nil
+    end
+
+    self.preview = nil
+    self:set_move_overlay_visible(true)
+    return true
+end
+
+function Map:move_unit(y, x)
+    if not self:begin_action_preview(y, x) then
         return
     end
 
@@ -292,7 +352,7 @@ function Map:get_actions_at(y, x)
         return {}
     end
 
-    local unit_obj = self.selected and self.selected.tile and self.selected.tile.unit
+    local unit_obj = self.preview and self.preview.unit or (self.selected and self.selected.tile and self.selected.tile.unit)
     if not unit_obj then
         return {}
     end
@@ -310,14 +370,11 @@ function Map:wait_unit(y, x)
         return false
     end
 
-    local unit = self.selected.tile.unit
-    if y ~= self.selected.y or x ~= self.selected.x then
-        self.tileTable[y][x].unit = unit
-        self.selected.tile.unit = nil
-    end
+    local unit = self.preview and self.preview.unit or self.selected.tile.unit
 
     unit:de_select()
     unit:set_used(true)
+    self.preview = nil
     self:de_select(self.selected.y, self.selected.x)
     return true
 end

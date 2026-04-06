@@ -144,6 +144,10 @@ function Game:get_actions_at(y, x)
     return self.map:get_actions_at(y, x)
 end
 
+function Game:cancel_action_preview()
+    return self.map:cancel_action_preview()
+end
+
 
 
 
