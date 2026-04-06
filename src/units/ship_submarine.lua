@@ -9,6 +9,7 @@ ship_submarine.att_soft = 80
 ship_submarine.att_hard = 80
 ship_submarine.att_air = 0
 ship_submarine.range = 1
+ship_submarine.direct_fire = true
 
 ship_submarine.movement = 5
 ship_submarine.moveaction = true

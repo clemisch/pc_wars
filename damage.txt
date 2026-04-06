@@ -8,3 +8,5 @@ att_soft, att_hard from attacker
 hp, hp_max from attacker
 hardness from defender
 cover_terrain from defender
+
+ranged units never take retaliation

@@ -9,6 +9,7 @@ heli_tp.att_soft = 0
 heli_tp.att_hard = 0
 heli_tp.att_air = 0
 heli_tp.range = 1
+heli_tp.direct_fire = true
 
 heli_tp.movement = 5
 heli_tp.moveaction = true

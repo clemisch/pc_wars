@@ -9,6 +9,7 @@ flak.att_soft = 80
 flak.att_hard = 15
 flak.att_air = 0
 flak.range = 1
+flak.direct_fire = true
 
 flak.movement = 5
 flak.moveaction = true

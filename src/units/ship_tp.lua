@@ -9,6 +9,7 @@ ship_tp.att_soft = 0
 ship_tp.att_hard = 0
 ship_tp.att_air = 0
 ship_tp.range = 1
+ship_tp.direct_fire = true
 
 ship_tp.movement = 5
 ship_tp.moveaction = true

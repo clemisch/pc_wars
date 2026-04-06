@@ -9,6 +9,7 @@ ship_battle.att_soft = 40
 ship_battle.att_hard = 80
 ship_battle.att_air = 0
 ship_battle.range = 5
+ship_battle.direct_fire = true
 
 ship_battle.movement = 5
 ship_battle.moveaction = false

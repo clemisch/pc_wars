@@ -9,6 +9,7 @@ rocket.att_soft = 80
 rocket.att_hard = 80
 rocket.att_air = 0
 rocket.range = 1
+rocket.direct_fire = true
 
 rocket.movement = 5
 rocket.moveaction = true

@@ -9,6 +9,7 @@ bomb.att_soft = 100
 bomb.att_hard = 100
 bomb.att_air = 0
 bomb.range = 1
+bomb.direct_fire = true
 
 bomb.movement = 5
 bomb.moveaction = true

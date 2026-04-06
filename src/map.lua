@@ -542,12 +542,13 @@ function Map:attack_unit(y, x)
     local attacker_tile = self:get_tile(self.preview.y, self.preview.x)
     local tile_target = self:get_tile(y, x)
     local defender = tile_target.unit
+    local distance = manhattan_distance(self.preview.y, self.preview.x, y, x)
 
     local damage_to_defender = calculate_damage(attacker, defender, tile_target)
     defender:take_damage(damage_to_defender)
     if defender:is_destroyed() then
         tile_target.unit = nil
-    else
+    elseif distance == 1 and attacker.direct_fire and defender.direct_fire then
         local damage_to_attacker = calculate_damage(defender, attacker, attacker_tile)
         attacker:take_damage(damage_to_attacker)
         if attacker:is_destroyed() then

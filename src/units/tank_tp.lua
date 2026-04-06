@@ -9,6 +9,7 @@ tank_tp.att_soft = 0
 tank_tp.att_hard = 0
 tank_tp.att_air = 0
 tank_tp.range = 1
+tank_tp.direct_fire = true
 
 tank_tp.movement = 6
 tank_tp.moveaction = true

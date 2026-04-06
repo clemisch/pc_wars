@@ -9,6 +9,7 @@ tank_medium.att_soft = 80
 tank_medium.att_hard = 80
 tank_medium.att_air = 0
 tank_medium.range = 1
+tank_medium.direct_fire = true
 
 tank_medium.movement = 5
 tank_medium.moveaction = true

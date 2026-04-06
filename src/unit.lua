@@ -38,6 +38,10 @@ function Unit:init(name, owner, lp, is_used)
         self.range = {self.range, self.range}
     end
 
+    if self.direct_fire == nil then
+        self.direct_fire = true
+    end
+
     self.max_lp = stats.lp
     self.lp = lp or stats.lp
 end

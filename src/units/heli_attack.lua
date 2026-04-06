@@ -9,6 +9,7 @@ heli_attack.att_soft = 60
 heli_attack.att_hard = 55
 heli_attack.att_air = 45
 heli_attack.range = 1
+heli_attack.direct_fire = true
 
 heli_attack.movement = 5
 heli_attack.moveaction = true

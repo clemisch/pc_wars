@@ -9,6 +9,7 @@ slime.att_soft = 80
 slime.att_hard = 80
 slime.att_air = 0
 slime.range = 1
+slime.direct_fire = true
 
 slime.movement = 5
 slime.moveaction = true

@@ -9,6 +9,7 @@ artillery_rocket.att_soft = 90
 artillery_rocket.att_hard = 55
 artillery_rocket.att_air = 0
 artillery_rocket.range = {2, 4}
+artillery_rocket.direct_fire = false
 
 artillery_rocket.movement = 3
 artillery_rocket.moveaction = false
