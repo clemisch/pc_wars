@@ -2,6 +2,8 @@
 local tank_ultra = {}
 
 tank_ultra.type = "vehicle"
+tank_ultra.target_type = "land"
+tank_ultra.attack_types = {"land", "sea"}
 tank_ultra.lp = 100
 tank_ultra.hardness = 1
 

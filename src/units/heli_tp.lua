@@ -2,6 +2,8 @@
 local heli_tp = {}
 
 heli_tp.type = "plane"
+heli_tp.target_type = "air"
+heli_tp.attack_types = {}
 heli_tp.lp = 100
 heli_tp.hardness = 1
 

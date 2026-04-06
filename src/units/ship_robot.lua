@@ -2,6 +2,8 @@
 local ship_robot = {}
 
 ship_robot.type = "ship"
+ship_robot.target_type = "sea"
+ship_robot.attack_types = {}
 ship_robot.lp = 100
 ship_robot.hardness = 1
 

@@ -2,6 +2,8 @@
 local plane_stealth = {}
 
 plane_stealth.type = "plane"
+plane_stealth.target_type = "air"
+plane_stealth.attack_types = {"land", "sea", "air"}
 plane_stealth.lp = 100
 plane_stealth.hardness = 1
 

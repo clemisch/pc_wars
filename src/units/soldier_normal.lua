@@ -2,6 +2,8 @@
 local soldier_normal = {}
 
 soldier_normal.type = "inf"
+soldier_normal.target_type = "land"
+soldier_normal.attack_types = {"land"}
 soldier_normal.lp = 100
 soldier_normal.hardness = 0
 

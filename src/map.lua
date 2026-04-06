@@ -63,7 +63,17 @@ local function get_attack_range_bounds(unit_obj)
 end
 
 local function is_air_unit(unit_obj)
-    return unit_obj and unit_obj.type == "plane"
+    return unit_obj and unit_obj.target_type == "air"
+end
+
+local function can_unit_attack_target(attacker, defender)
+    return (
+        attacker and
+        defender and
+        attacker.attack_types_lookup and
+        defender.target_type and
+        attacker.attack_types_lookup[defender.target_type] == true
+    )
 end
 
 local function get_attack_stat(attacker, defender)
@@ -373,7 +383,8 @@ function Map:can_attack_from(y, x)
                 dist >= min_range and
                 dist <= max_range and
                 tile_obj.unit and
-                tile_obj.unit.owner ~= unit_obj.owner
+                tile_obj.unit.owner ~= unit_obj.owner and
+                can_unit_attack_target(unit_obj, tile_obj.unit)
             ) then
                 return true
             end
@@ -529,7 +540,8 @@ function Map:can_attack_unit_at(y, x)
     return (
         attacker ~= nil and
         defender ~= nil and
-        defender.owner ~= attacker.owner
+        defender.owner ~= attacker.owner and
+        can_unit_attack_target(attacker, defender)
     )
 end
 

@@ -2,6 +2,8 @@
 local soldier_mech = {}
 
 soldier_mech.type = "inf"
+soldier_mech.target_type = "land"
+soldier_mech.attack_types = {"land", "sea", "air"}
 soldier_mech.lp = 150
 soldier_mech.hardness = 0
 

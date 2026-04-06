@@ -2,6 +2,8 @@
 local ship_carrier = {}
 
 ship_carrier.type = "ship"
+ship_carrier.target_type = "sea"
+ship_carrier.attack_types = {}
 ship_carrier.lp = 100
 ship_carrier.hardness = 1
 

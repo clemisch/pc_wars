@@ -2,6 +2,8 @@
 local tank_light = {}
 
 tank_light.type = "vehicle"
+tank_light.target_type = "land"
+tank_light.attack_types = {"land", "sea"}
 tank_light.lp = 100
 tank_light.hardness = 1
 

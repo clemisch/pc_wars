@@ -2,6 +2,8 @@
 local flak_rocket = {}
 
 flak_rocket.type = "vehicle"
+flak_rocket.target_type = "land"
+flak_rocket.attack_types = {"air"}
 flak_rocket.lp = 100
 flak_rocket.hardness = 1
 

@@ -42,6 +42,12 @@ function Unit:init(name, owner, lp, is_used)
         self.direct_fire = true
     end
 
+    self.attack_types = self.attack_types or {}
+    self.attack_types_lookup = {}
+    for _, attack_type in ipairs(self.attack_types) do
+        self.attack_types_lookup[attack_type] = true
+    end
+
     self.max_lp = stats.lp
     self.lp = lp or stats.lp
 end

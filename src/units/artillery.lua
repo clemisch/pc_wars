@@ -2,6 +2,8 @@
 local artillery = {}
 
 artillery.type = "vehicle"
+artillery.target_type = "land"
+artillery.attack_types = {"land", "sea"}
 artillery.lp = 150
 artillery.hardness = 0
 

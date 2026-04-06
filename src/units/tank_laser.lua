@@ -2,6 +2,8 @@
 local tank_laser = {}
 
 tank_laser.type = "vehicle"
+tank_laser.target_type = "land"
+tank_laser.attack_types = {"land", "sea"}
 tank_laser.lp = 100
 tank_laser.hardness = 1
 

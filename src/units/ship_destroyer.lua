@@ -2,6 +2,8 @@
 local ship_destroyer = {}
 
 ship_destroyer.type = "ship"
+ship_destroyer.target_type = "sea"
+ship_destroyer.attack_types = {"sea", "air"}
 ship_destroyer.lp = 100
 ship_destroyer.hardness = 1
 

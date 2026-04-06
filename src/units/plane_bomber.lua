@@ -2,6 +2,8 @@
 local plane_bomber = {}
 
 plane_bomber.type = "plane"
+plane_bomber.target_type = "air"
+plane_bomber.attack_types = {"land", "sea"}
 plane_bomber.lp = 100
 plane_bomber.hardness = 1
 

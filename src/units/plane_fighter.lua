@@ -2,6 +2,8 @@
 local plane_fighter = {}
 
 plane_fighter.type = "plane"
+plane_fighter.target_type = "air"
+plane_fighter.attack_types = {"air"}
 plane_fighter.lp = 100
 plane_fighter.hardness = 1
 

@@ -2,6 +2,8 @@
 local rocket = {}
 
 rocket.type = "plane"
+rocket.target_type = "air"
+rocket.attack_types = {"land", "sea"}
 rocket.lp = 100
 rocket.hardness = 1
 

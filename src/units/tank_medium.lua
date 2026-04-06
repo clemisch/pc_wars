@@ -2,6 +2,8 @@
 local tank_medium = {}
 
 tank_medium.type = "vehicle"
+tank_medium.target_type = "land"
+tank_medium.attack_types = {"land", "sea"}
 tank_medium.lp = 100
 tank_medium.hardness = 1
 

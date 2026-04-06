@@ -2,6 +2,8 @@
 local ship_battle = {}
 
 ship_battle.type = "ship"
+ship_battle.target_type = "sea"
+ship_battle.attack_types = {"land", "sea"}
 ship_battle.lp = 100
 ship_battle.hardness = 1
 

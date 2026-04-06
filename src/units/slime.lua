@@ -2,6 +2,8 @@
 local slime = {}
 
 slime.type = "vehicle"
+slime.target_type = "land"
+slime.attack_types = {"land", "sea"}
 slime.lp = 100
 slime.hardness = 1
 
