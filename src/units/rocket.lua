@@ -15,6 +15,9 @@ rocket.direct_fire = true
 rocket.can_build = false
 rocket.producer = "airport"
 
+rocket.transport_capacity = 0
+rocket.can_transport = false
+
 rocket.movement = 5
 rocket.moveaction = true
 

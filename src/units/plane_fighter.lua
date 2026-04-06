@@ -15,6 +15,9 @@ plane_fighter.direct_fire = true
 plane_fighter.can_build = true
 plane_fighter.producer = "airport"
 
+plane_fighter.transport_capacity = 0
+plane_fighter.can_transport = false
+
 plane_fighter.movement = 5
 plane_fighter.moveaction = true
 

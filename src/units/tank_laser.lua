@@ -15,6 +15,9 @@ tank_laser.direct_fire = true
 tank_laser.can_build = false
 tank_laser.producer = "factory"
 
+tank_laser.transport_capacity = 0
+tank_laser.can_transport = false
+
 tank_laser.movement = 5
 tank_laser.moveaction = true
 

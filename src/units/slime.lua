@@ -15,6 +15,9 @@ slime.direct_fire = true
 slime.can_build = false
 slime.producer = "factory"
 
+slime.transport_capacity = 0
+slime.can_transport = false
+
 slime.movement = 5
 slime.moveaction = true
 

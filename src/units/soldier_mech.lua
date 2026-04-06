@@ -15,11 +15,13 @@ soldier_mech.direct_fire = true
 soldier_mech.can_build = true
 soldier_mech.producer = "factory"
 
+soldier_mech.transport_capacity = 0
+soldier_mech.can_transport = false
+
 soldier_mech.movement = 2
 soldier_mech.moveaction = true
 
 soldier_mech.cost = 3000
-
 
 
 return soldier_mech

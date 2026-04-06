@@ -15,6 +15,9 @@ flak.direct_fire = true
 flak.can_build = true
 flak.producer = "factory"
 
+flak.transport_capacity = 0
+flak.can_transport = false
+
 flak.movement = 5
 flak.moveaction = true
 

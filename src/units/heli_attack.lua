@@ -15,6 +15,9 @@ heli_attack.direct_fire = true
 heli_attack.can_build = true
 heli_attack.producer = "airport"
 
+heli_attack.transport_capacity = 0
+heli_attack.can_transport = false
+
 heli_attack.movement = 5
 heli_attack.moveaction = true
 

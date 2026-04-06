@@ -15,11 +15,13 @@ tank_tp.direct_fire = true
 tank_tp.can_build = true
 tank_tp.producer = "factory"
 
+tank_tp.transport_capacity = 1
+tank_tp.can_transport = function(unit) return unit.type == "inf" end
+
 tank_tp.movement = 6
 tank_tp.moveaction = true
 
 tank_tp.cost = 3000
-
 
 
 return tank_tp

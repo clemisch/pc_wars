@@ -15,6 +15,9 @@ artillery_rocket.direct_fire = false
 artillery_rocket.can_build = true
 artillery_rocket.producer = "factory"
 
+artillery_rocket.transport_capacity = 0
+artillery_rocket.can_transport = false
+
 artillery_rocket.movement = 3
 artillery_rocket.moveaction = false
 

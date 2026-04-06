@@ -15,6 +15,9 @@ plane_stealth.direct_fire = true
 plane_stealth.can_build = false
 plane_stealth.producer = "airport"
 
+plane_stealth.transport_capacity = 0
+plane_stealth.can_transport = false
+
 plane_stealth.movement = 5
 plane_stealth.moveaction = true
 

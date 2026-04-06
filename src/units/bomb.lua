@@ -15,6 +15,9 @@ bomb.direct_fire = true
 bomb.can_build = false
 bomb.producer = "factory"
 
+bomb.transport_capacity = 0
+bomb.can_transport = false
+
 bomb.movement = 5
 bomb.moveaction = true
 

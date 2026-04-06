@@ -15,6 +15,9 @@ ship_destroyer.direct_fire = true
 ship_destroyer.can_build = true
 ship_destroyer.producer = "seaport"
 
+ship_destroyer.transport_capacity = 0
+ship_destroyer.can_transport = false
+
 ship_destroyer.movement = 5
 ship_destroyer.moveaction = true
 

@@ -15,6 +15,9 @@ ship_battle.direct_fire = true
 ship_battle.can_build = true
 ship_battle.producer = "seaport"
 
+ship_battle.transport_capacity = 0
+ship_battle.can_transport = false
+
 ship_battle.movement = 5
 ship_battle.moveaction = false
 

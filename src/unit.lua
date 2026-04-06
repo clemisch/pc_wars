@@ -21,6 +21,7 @@ local function get_lp_indicator(lp, max_lp)
     return indicator
 end
 
+
 function Unit:init(name, owner, lp, is_used)
     assert(name)
     assert(owner)
@@ -42,6 +43,16 @@ function Unit:init(name, owner, lp, is_used)
     if self.direct_fire == nil then
         self.direct_fire = true
     end
+
+    if self.transport_capacity == nil then
+        self.transport_capacity = 0
+    end
+
+    if self.can_transport == nil then
+        self.can_transport = false
+    end
+
+    self.cargo = {}
 
     self.attack_types = self.attack_types or {}
     self.attack_types_lookup = {}

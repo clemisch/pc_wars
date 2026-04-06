@@ -15,6 +15,9 @@ tank_ultra.direct_fire = true
 tank_ultra.can_build = true
 tank_ultra.producer = "factory"
 
+tank_ultra.transport_capacity = 0
+tank_ultra.can_transport = false
+
 tank_ultra.movement = 5
 tank_ultra.moveaction = true
 

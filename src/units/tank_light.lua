@@ -15,6 +15,9 @@ tank_light.direct_fire = true
 tank_light.can_build = true
 tank_light.producer = "factory"
 
+tank_light.transport_capacity = 0
+tank_light.can_transport = false
+
 tank_light.movement = 5
 tank_light.moveaction = true
 

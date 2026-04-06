@@ -15,6 +15,9 @@ ship_carrier.direct_fire = true
 ship_carrier.can_build = true
 ship_carrier.producer = "seaport"
 
+ship_carrier.transport_capacity = 2
+ship_carrier.can_transport = function(unit) return unit.type == "plane" end
+
 ship_carrier.movement = 5
 ship_carrier.moveaction = true
 

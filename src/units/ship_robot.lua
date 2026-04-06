@@ -15,6 +15,9 @@ ship_robot.direct_fire = true
 ship_robot.can_build = false
 ship_robot.producer = "seaport"
 
+ship_robot.transport_capacity = 0
+ship_robot.can_transport = false
+
 ship_robot.movement = 5
 ship_robot.moveaction = true
 

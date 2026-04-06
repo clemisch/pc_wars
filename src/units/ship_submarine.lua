@@ -15,6 +15,9 @@ ship_submarine.direct_fire = true
 ship_submarine.can_build = true
 ship_submarine.producer = "seaport"
 
+ship_submarine.transport_capacity = 0
+ship_submarine.can_transport = false
+
 ship_submarine.movement = 5
 ship_submarine.moveaction = true
 

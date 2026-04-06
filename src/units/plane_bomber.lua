@@ -15,6 +15,9 @@ plane_bomber.direct_fire = true
 plane_bomber.can_build = true
 plane_bomber.producer = "airport"
 
+plane_bomber.transport_capacity = 0
+plane_bomber.can_transport = false
+
 plane_bomber.movement = 5
 plane_bomber.moveaction = true
 

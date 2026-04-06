@@ -15,6 +15,9 @@ tank_heavy.direct_fire = true
 tank_heavy.can_build = true
 tank_heavy.producer = "factory"
 
+tank_heavy.transport_capacity = 0
+tank_heavy.can_transport = false
+
 tank_heavy.movement = 5
 tank_heavy.moveaction = true
 

@@ -15,6 +15,9 @@ ship_tp.direct_fire = true
 ship_tp.can_build = true
 ship_tp.producer = "seaport"
 
+ship_tp.transport_capacity = 2
+ship_tp.can_transport = function(unit) return unit.type == "inf" or unit.type == "vehicle" end
+
 ship_tp.movement = 5
 ship_tp.moveaction = true
 
