@@ -10,3 +10,5 @@ hardness from defender
 cover_terrain from defender
 
 ranged units never take retaliation
+retaliation damage is only performed if both attacker and defender have
+    `unit.direct_fire == true`
