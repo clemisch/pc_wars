@@ -12,12 +12,13 @@ local Unit = Class.new()
 local function get_lp_indicator(lp, max_lp)
     local relative_lp = (lp / max_lp) * 100
     local rounded_lp = math.floor(relative_lp + 0.5)
+    local indicator = math.max(1, math.floor((rounded_lp + 5) / 10))
 
-    if rounded_lp >= 94 then
+    if indicator >= 10 then
         return nil
     end
 
-    return math.max(1, math.ceil(rounded_lp / 10))
+    return indicator
 end
 
 function Unit:init(name, owner, lp, is_used)
