@@ -8,16 +8,22 @@ local unit_string_to_int = Loader.unit_string_to_num
 
 
 local Unit = Class.new()
-function Unit:init(name, owner, health, is_used)
+function Unit:init(name, owner, lp, is_used)
     assert(name)
     assert(owner)
 
+    local stats = unit_db.get(name)
+
     self.name = name
     self.owner = owner
-    self.health = health or 100
-    self.movement = assert(unit_db[name], name).movement
-    self.range = 1
     self.is_used = is_used or false
+
+    for key, value in pairs(stats) do
+        self[key] = value
+    end
+
+    self.max_lp = stats.lp
+    self.lp = lp or stats.lp
 end
 
 function Unit:draw(y, x)
@@ -44,6 +50,14 @@ end
 
 function Unit:set_used(is_used)
     self.is_used = is_used
+end
+
+function Unit:take_damage(damage)
+    self.lp = self.lp - damage
+end
+
+function Unit:is_destroyed()
+    return self.lp <= 0
 end
 
 

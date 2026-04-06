@@ -8,7 +8,7 @@ soldier_normal.hardness = 0
 soldier_normal.att_soft = 46
 soldier_normal.att_hard = 0
 soldier_normal.att_air = 10
-soldier_normal.range = 3
+soldier_normal.range = 1
 
 soldier_normal.movement = 3
 soldier_normal.moveaction = true

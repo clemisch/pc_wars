@@ -8,7 +8,7 @@ soldier_mech.hardness = 0
 soldier_mech.att_soft = 65
 soldier_mech.att_hard = 45
 soldier_mech.att_air = 35
-soldier_mech.range = 2
+soldier_mech.range = 1
 
 soldier_mech.movement = 2
 soldier_mech.moveaction = true

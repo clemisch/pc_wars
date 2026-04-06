@@ -1,7 +1,7 @@
 --- @module
 local bomb = {}
 
-bomb.type = "air"
+bomb.type = "vehicle"
 bomb.lp = 100
 bomb.hardness = 0
 

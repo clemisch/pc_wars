@@ -1,6 +1,10 @@
 --- @module
 local unit_db = {}
 
+function unit_db.get(name)
+    return assert(unit_db[name], name)
+end
+
 -- infantry
 unit_db.soldier_normal = require("src.units.soldier_normal")
 unit_db.soldier_mech   = require("src.units.soldier_mech")

@@ -51,6 +51,14 @@ function AttackTarget:keypressed(key)
         Gamestate.pop()
         return
     end
+
+    if key == "k" then
+        if self.game:attack_action(self.game.cursor.y, self.game.cursor.x) then
+            Gamestate.pop()
+            Gamestate.pop()
+        end
+        return
+    end
 end
 
 function AttackTarget:resume(pre)

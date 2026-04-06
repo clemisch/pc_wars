@@ -54,27 +54,54 @@ local function can_unit_move_on_tile(unit_obj, tile_obj)
     return false
 end
 
-local function has_enemy_neighbor(tile_table, y, x, owner)
-    local neighbors = {
-        {y = y - 1, x = x},
-        {y = y + 1, x = x},
-        {y = y, x = x - 1},
-        {y = y, x = x + 1},
-    }
-
-    for _, coords in ipairs(neighbors) do
-        local row = tile_table[coords.y]
-        local tile_obj = row and row[coords.x]
-        if tile_obj and tile_obj.unit and tile_obj.unit.owner ~= owner then
-            return true
-        end
-    end
-
-    return false
-end
-
 local function manhattan_distance(y0, x0, y1, x1)
     return math.abs(y1 - y0) + math.abs(x1 - x0)
+end
+
+local function get_attack_range_bounds(unit_obj)
+    if type(unit_obj.range) == "table" then
+        return unit_obj.range[1], unit_obj.range[2]
+    end
+
+    return 1, unit_obj.range
+end
+
+local function is_air_unit(unit_obj)
+    return unit_obj and unit_obj.type == "plane"
+end
+
+local function get_attack_stat(attacker, defender)
+    if is_air_unit(defender) then
+        return attacker.att_air or 0
+    end
+
+    if defender.hardness and defender.hardness > 0 then
+        return attacker.att_hard or 0
+    end
+
+    return attacker.att_soft or 0
+end
+
+local function get_tile_cover(tile_obj)
+    local cover = {
+        grass = 1,
+        city = 2,
+        factory = 2,
+        airport = 2,
+        seaport = 2,
+        hq = 3,
+        water = 0,
+        beach_n = 0,
+        beach_e = 0,
+        beach_s = 0,
+        beach_w = 0,
+        beach_nw = 0,
+        beach_ne = 0,
+        beach_se = 0,
+        beach_sw = 0,
+    }
+
+    return cover[tile_obj.name] or 0
 end
 
 
@@ -309,6 +336,41 @@ function Map:can_wait_at(y, x)
     return self.tiles_move and self.tiles_move[key] ~= nil
 end
 
+function Map:can_attack_from(y, x)
+    if not self.preview or self.preview.y ~= y or self.preview.x ~= x then
+        return false
+    end
+
+    local unit_obj = self.preview.unit
+    if not unit_obj or not unit_obj.range then
+        return false
+    end
+
+    if (
+        not unit_obj.moveaction and
+        (self.preview.y ~= self.preview.from_y or self.preview.x ~= self.preview.from_x)
+    ) then
+        return false
+    end
+
+    local min_range, max_range = get_attack_range_bounds(unit_obj)
+    for yy, row in ipairs(self.tileTable) do
+        for xx, tile_obj in ipairs(row) do
+            local dist = manhattan_distance(y, x, yy, xx)
+            if (
+                dist >= min_range and
+                dist <= max_range and
+                tile_obj.unit and
+                tile_obj.unit.owner ~= unit_obj.owner
+            ) then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
 function Map:begin_action_preview(y, x)
     if not self:can_wait_at(y, x) then
         return false
@@ -356,16 +418,22 @@ function Map:begin_attack_targeting(y, x)
         return false
     end
 
+    if not self:can_attack_from(y, x) then
+        return false
+    end
+
     if self.tiles_attack then
         self:set_attack_overlay_visible(true)
         return true
     end
 
     local unit_obj = self.preview.unit
+    local min_range, max_range = get_attack_range_bounds(unit_obj)
     self.tiles_attack = {}
     for yy, row in ipairs(self.tileTable) do
         for xx, _ in ipairs(row) do
-            if manhattan_distance(y, x, yy, xx) <= unit_obj.range and not (yy == y and xx == x) then
+            local dist = manhattan_distance(y, x, yy, xx)
+            if dist >= min_range and dist <= max_range then
                 self.tiles_attack[coords_to_string(yy, xx)] = true
                 self.tileTable[yy][xx].do_attack_overlay = true
             end
@@ -411,7 +479,7 @@ function Map:get_actions_at(y, x)
     end
 
     local actions = {"wait"}
-    if has_enemy_neighbor(self.tileTable, y, x, unit_obj.owner) then
+    if self:can_attack_from(y, x) then
         table.insert(actions, "attack")
     end
 
@@ -432,13 +500,60 @@ function Map:wait_unit(y, x)
     return true
 end
 
-function Map:attack_unit(y, x)
-    if not self:can_wait_at(y, x) then
+function Map:can_attack_unit_at(y, x)
+    if not self.preview or not self.tiles_attack then
         return false
     end
 
-    log.debug("Attack is not implemented yet")
-    return false
+    local key = coords_to_string(y, x)
+    if not self.tiles_attack[key] then
+        return false
+    end
+
+    local attacker = self.preview.unit
+    local tile_target = self:get_tile(y, x)
+    local defender = tile_target and tile_target.unit
+
+    return (
+        attacker ~= nil and
+        defender ~= nil and
+        defender.owner ~= attacker.owner
+    )
+end
+
+function Map:attack_unit(y, x)
+    if not self:can_attack_unit_at(y, x) then
+        return false
+    end
+
+    local attacker = self.preview.unit
+    local tile_target = self:get_tile(y, x)
+    local defender = tile_target.unit
+
+    local attacker_factor = attacker.lp / attacker.max_lp
+    local hardness = defender.hardness or 0
+    local soft_dmg = (attacker.att_soft or 0) * attacker_factor * (1 - hardness)
+    local hard_dmg = (attacker.att_hard or 0) * attacker_factor * hardness
+
+    if is_air_unit(defender) then
+        soft_dmg = 0
+        hard_dmg = get_attack_stat(attacker, defender) * attacker_factor
+    end
+
+    local factor_terrain = 1 - (get_tile_cover(tile_target) / 5)
+    local factor_rand = 0.9 + love.math.random() * 0.2
+    local damage = math.floor((factor_rand * factor_terrain * (soft_dmg + hard_dmg)) + 0.5)
+
+    defender:take_damage(damage)
+    if defender:is_destroyed() then
+        tile_target.unit = nil
+    end
+
+    attacker:de_select()
+    attacker:set_used(true)
+    self.preview = nil
+    self:de_select(self.selected.y, self.selected.x)
+    return true
 end
 
 function Map:build_unit(y, x, unit_name, owner)
@@ -455,7 +570,7 @@ function Map:build_unit(y, x, unit_name, owner)
         return false
     end
 
-    tile_sel:set_unit(unit.Unit(unit_name, owner, 100, true))
+    tile_sel:set_unit(unit.Unit(unit_name, owner, nil, true))
     return true
 end
 

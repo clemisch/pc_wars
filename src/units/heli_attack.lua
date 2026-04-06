@@ -1,7 +1,7 @@
 --- @module
 local heli_attack = {}
 
-heli_attack.type = "air"
+heli_attack.type = "plane"
 heli_attack.lp = 100
 heli_attack.hardness = 1
 
