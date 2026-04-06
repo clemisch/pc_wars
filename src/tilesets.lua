@@ -29,21 +29,21 @@ for i, frame in ipairs(ground.animation_frames) do
 end
 ground.spritesheet = ground.spritesheets[1]
 ground.quadSpecs = {
-    grass     = {y = 2 , x = 6, sizeY = 1, sizeX = 1                  },
-    city      = {y = 3 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true },
-    factory   = {y = 5 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true },
-    airport   = {y = 7 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true },
-    seaport   = {y = 9 , x = 1, sizeY = 2, sizeX = 1, hasOwner = true },
-    hq        = {y = 11, x = 1, sizeY = 2, sizeX = 1, hasOwner = true },
-    water     = {y = 7 , x = 10, sizeY = 1, sizeX = 1                 },
-    beach_n   = {y = 6 , x = 15, sizeY = 1, sizeX = 1                 },
-    beach_e   = {y = 5 , x = 15, sizeY = 1, sizeX = 1                 },
-    beach_s   = {y = 5 , x = 16, sizeY = 1, sizeX = 1                 },
-    beach_w   = {y = 6 , x = 16, sizeY = 1, sizeX = 1                 },
-    beach_nw  = {y = 10, x = 13, sizeY = 1, sizeX = 1                 },
-    beach_ne  = {y = 10, x = 14, sizeY = 1, sizeX = 1                 },
-    beach_se  = {y = 11, x = 14, sizeY = 1, sizeX = 1                 },
-    beach_sw  = {y = 11, x = 13, sizeY = 1, sizeX = 1                 },
+    grass     = {y =  2 , x =  6 , sizeY = 1 , sizeX = 1 , } ,
+    city      = {y =  3 , x =  1 , sizeY = 2 , sizeX = 1 , hasOwner = true } ,
+    factory   = {y =  5 , x =  1 , sizeY = 2 , sizeX = 1 , hasOwner = true } ,
+    airport   = {y =  7 , x =  1 , sizeY = 2 , sizeX = 1 , hasOwner = true } ,
+    seaport   = {y =  9 , x =  1 , sizeY = 2 , sizeX = 1 , hasOwner = true } ,
+    hq        = {y = 11 , x =  1 , sizeY = 2 , sizeX = 1 , hasOwner = true } ,
+    water     = {y = 7  , x = 10 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_n   = {y = 6  , x = 15 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_e   = {y = 5  , x = 15 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_s   = {y = 5  , x = 16 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_w   = {y = 6  , x = 16 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_nw  = {y = 10 , x = 13 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_ne  = {y = 10 , x = 14 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_se  = {y = 11 , x = 14 , sizeY = 1 , sizeX = 1 , }  ,
+    beach_sw  = {y = 11 , x = 13 , sizeY = 1 , sizeX = 1 , }  ,
 }
 ground.quads = {}
 for frame_index, spritesheet in ipairs(ground.spritesheets) do
