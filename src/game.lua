@@ -89,6 +89,8 @@ function Game:draw()
     local cursor_tile = self.map:get_tile(self.cursor.y, self.cursor.x)
     local unit_obj = cursor_tile and cursor_tile.unit
     if unit_obj then
+        local font_height = love.graphics.getFont():getHeight()
+        text_left(HEIGHT_PIXELS - font_height, unit_obj.name, true)
         text_left(HEIGHT_PIXELS, ("LP: %i/%i"):format(unit_obj.lp, unit_obj.max_lp), true)
     end
 
@@ -164,6 +166,10 @@ end
 
 function Game:attack_action(y, x)
     return self.map:attack_unit(y, x)
+end
+
+function Game:load_action(y, x)
+    return self.map:load_unit(y, x)
 end
 
 function Game:get_actions_at(y, x)
