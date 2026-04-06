@@ -148,6 +148,14 @@ function Game:cancel_action_preview()
     return self.map:cancel_action_preview()
 end
 
+function Game:begin_attack_targeting(y, x)
+    return self.map:begin_attack_targeting(y, x)
+end
+
+function Game:cancel_attack_targeting()
+    return self.map:cancel_attack_targeting()
+end
+
 
 
 

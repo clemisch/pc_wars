@@ -85,7 +85,7 @@ function ActionMenu:keypressed(key)
     if option_name == "wait" and self.game:wait_action(self.y, self.x) then
         Gamestate.pop()
     elseif option_name == "attack" then
-        self.game:attack_action(self.y, self.x)
+        Gamestate.push(attacktarget.AttackTarget, self.y, self.x)
     end
 end
 

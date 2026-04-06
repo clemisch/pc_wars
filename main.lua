@@ -9,6 +9,7 @@ game = require("src.game")
 pause = require("src.pause")
 buymenu = require("src.buymenu")
 actionmenu = require("src.actionmenu")
+attacktarget = require("src.attacktarget")
 
 -- global start time used for animation
 TIME_START = love.timer.getTime()

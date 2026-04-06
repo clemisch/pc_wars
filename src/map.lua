@@ -73,6 +73,10 @@ local function has_enemy_neighbor(tile_table, y, x, owner)
     return false
 end
 
+local function manhattan_distance(y0, x0, y1, x1)
+    return math.abs(y1 - y0) + math.abs(x1 - x0)
+end
+
 
 local Map = Class.new()
 function Map:init(name)
@@ -115,6 +119,17 @@ function Map:set_move_overlay_visible(is_visible)
     for key, _ in pairs(self.tiles_move) do
         local y, x = string_to_coords(key)
         self.tileTable[y][x].do_overlay = is_visible
+    end
+end
+
+function Map:set_attack_overlay_visible(is_visible)
+    if not self.tiles_attack then
+        return
+    end
+
+    for key, _ in pairs(self.tiles_attack) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_attack_overlay = is_visible
     end
 end
 
@@ -253,6 +268,7 @@ end
 
 function Map:de_select(y, x)
     if self.is_select then
+        self:cancel_attack_targeting()
         self:cancel_action_preview()
         self.selected.tile:de_select()
         self.selected = nil
@@ -332,6 +348,43 @@ function Map:cancel_action_preview()
 
     self.preview = nil
     self:set_move_overlay_visible(true)
+    return true
+end
+
+function Map:begin_attack_targeting(y, x)
+    if not self.preview or self.preview.y ~= y or self.preview.x ~= x then
+        return false
+    end
+
+    if self.tiles_attack then
+        self:set_attack_overlay_visible(true)
+        return true
+    end
+
+    local unit_obj = self.preview.unit
+    self.tiles_attack = {}
+    for yy, row in ipairs(self.tileTable) do
+        for xx, _ in ipairs(row) do
+            if manhattan_distance(y, x, yy, xx) <= unit_obj.range and not (yy == y and xx == x) then
+                self.tiles_attack[coords_to_string(yy, xx)] = true
+                self.tileTable[yy][xx].do_attack_overlay = true
+            end
+        end
+    end
+
+    return true
+end
+
+function Map:cancel_attack_targeting()
+    if not self.tiles_attack then
+        return false
+    end
+
+    for key, _ in pairs(self.tiles_attack) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_attack_overlay = false
+    end
+    self.tiles_attack = nil
     return true
 end
 

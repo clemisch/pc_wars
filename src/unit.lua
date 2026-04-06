@@ -16,6 +16,7 @@ function Unit:init(name, owner, health, is_used)
     self.owner = owner
     self.health = health or 100
     self.movement = assert(unit_db[name], name).movement
+    self.range = 1
     self.is_used = is_used or false
 end
 

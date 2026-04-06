@@ -9,6 +9,7 @@ function Tile:init(name, owner)
     self.unit = nil
     self.is_select = false
     self.do_overlay = false
+    self.do_attack_overlay = false
 end
 
 function Tile:__tostring()
@@ -38,9 +39,9 @@ end
 function Tile:draw_overlay(y, x)
     if self.do_overlay then
         -- white overlay
-        local overlay = Tilesets.overlays.quads.overlays
+        local overlay = Tilesets.overlays.quads.move
         love.graphics.draw(
-            Tilesets.overlays.spritesheet,
+            Tilesets.overlays.move_spritesheet,
             overlay,
             (x - 1) * 16 * SCALING,
             (y - 1) * 16 * SCALING,
@@ -53,6 +54,18 @@ function Tile:draw_overlay(y, x)
             ((x - 1) * 16 + 6) * SCALING, 
             ((y - 1) * 16 + 6) * SCALING,
             0, 2
+        )
+    end
+
+    if self.do_attack_overlay then
+        local overlay = Tilesets.overlays.quads.attack
+        love.graphics.draw(
+            Tilesets.overlays.attack_spritesheet,
+            overlay,
+            (x - 1) * 16 * SCALING,
+            (y - 1) * 16 * SCALING,
+            0,
+            SCALING
         )
     end
 end
