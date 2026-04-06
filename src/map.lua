@@ -104,6 +104,22 @@ local function get_tile_cover(tile_obj)
     return cover[tile_obj.name] or 0
 end
 
+local function calculate_damage(attacker, defender, defender_tile)
+    local attacker_factor = attacker.lp / attacker.max_lp
+    local hardness = defender.hardness or 0
+    local soft_dmg = (attacker.att_soft or 0) * attacker_factor * (1 - hardness)
+    local hard_dmg = (attacker.att_hard or 0) * attacker_factor * hardness
+
+    if is_air_unit(defender) then
+        soft_dmg = 0
+        hard_dmg = (attacker.att_air or 0) * attacker_factor
+    end
+
+    local factor_terrain = 1 - (get_tile_cover(defender_tile) / 5)
+    local factor_rand = 0.9 + love.math.random() * 0.2
+    return math.floor((factor_rand * factor_terrain * (soft_dmg + hard_dmg)) + 0.5)
+end
+
 
 local Map = Class.new()
 function Map:init(name)
@@ -527,30 +543,27 @@ function Map:attack_unit(y, x)
     end
 
     local attacker = self.preview.unit
+    local attacker_tile = self:get_tile(self.preview.y, self.preview.x)
     local tile_target = self:get_tile(y, x)
     local defender = tile_target.unit
 
-    local attacker_factor = attacker.lp / attacker.max_lp
-    local hardness = defender.hardness or 0
-    local soft_dmg = (attacker.att_soft or 0) * attacker_factor * (1 - hardness)
-    local hard_dmg = (attacker.att_hard or 0) * attacker_factor * hardness
-
-    if is_air_unit(defender) then
-        soft_dmg = 0
-        hard_dmg = get_attack_stat(attacker, defender) * attacker_factor
-    end
-
-    local factor_terrain = 1 - (get_tile_cover(tile_target) / 5)
-    local factor_rand = 0.9 + love.math.random() * 0.2
-    local damage = math.floor((factor_rand * factor_terrain * (soft_dmg + hard_dmg)) + 0.5)
-
-    defender:take_damage(damage)
+    local damage_to_defender = calculate_damage(attacker, defender, tile_target)
+    defender:take_damage(damage_to_defender)
     if defender:is_destroyed() then
         tile_target.unit = nil
+    else
+        local damage_to_attacker = calculate_damage(defender, attacker, attacker_tile)
+        attacker:take_damage(damage_to_attacker)
+        if attacker:is_destroyed() then
+            attacker_tile.unit = nil
+        end
     end
 
-    attacker:de_select()
-    attacker:set_used(true)
+    if not attacker:is_destroyed() then
+        attacker:de_select()
+        attacker:set_used(true)
+    end
+
     self.preview = nil
     self:de_select(self.selected.y, self.selected.x)
     return true
