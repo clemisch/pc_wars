@@ -34,6 +34,10 @@ function Unit:init(name, owner, lp, is_used)
         self[key] = value
     end
 
+    if type(self.range) == "number" then
+        self.range = {self.range, self.range}
+    end
+
     self.max_lp = stats.lp
     self.lp = lp or stats.lp
 end

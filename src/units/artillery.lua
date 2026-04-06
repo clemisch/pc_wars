@@ -8,7 +8,7 @@ artillery.hardness = 0
 artillery.att_soft = 55
 artillery.att_hard = 55
 artillery.att_air = 0
-artillery.range = 2
+artillery.range = {1, 2}
 
 artillery.movement = 3
 artillery.moveaction = false

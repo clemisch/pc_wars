@@ -59,11 +59,7 @@ local function manhattan_distance(y0, x0, y1, x1)
 end
 
 local function get_attack_range_bounds(unit_obj)
-    if type(unit_obj.range) == "table" then
-        return unit_obj.range[1], unit_obj.range[2]
-    end
-
-    return 1, unit_obj.range
+    return unit_obj.range[1], unit_obj.range[2]
 end
 
 local function is_air_unit(unit_obj)
