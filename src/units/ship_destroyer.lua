@@ -1,8 +1,19 @@
 --- @module
 local ship_destroyer = {}
 
-ship_destroyer.movement = 3
-ship_destroyer.cost = 3000
+ship_destroyer.type = "ship"
+ship_destroyer.lp = 100
+ship_destroyer.hardness = 1
+
+ship_destroyer.att_soft = 40
+ship_destroyer.att_hard = 70
+ship_destroyer.att_air = 50
+ship_destroyer.range = 1
+
+ship_destroyer.movement = 5
+ship_destroyer.moveaction = true
+
+ship_destroyer.cost = 10000
 
 
 return ship_destroyer

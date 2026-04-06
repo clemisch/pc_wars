@@ -1,8 +1,19 @@
 --- @module
 local tank_medium = {}
 
-tank_medium.movement = 3
-tank_medium.cost = 3000
+tank_medium.type = "vehicle"
+tank_medium.lp = 100
+tank_medium.hardness = 1
+
+tank_medium.att_soft = 80
+tank_medium.att_hard = 80
+tank_medium.att_air = 0
+tank_medium.range = 1
+
+tank_medium.movement = 5
+tank_medium.moveaction = true
+
+tank_medium.cost = 10000
 
 
 return tank_medium

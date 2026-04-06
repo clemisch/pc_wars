@@ -1,8 +1,19 @@
 --- @module
 local tank_heavy = {}
 
-tank_heavy.movement = 3
-tank_heavy.cost = 3000
+tank_heavy.type = "vehicle"
+tank_heavy.lp = 100
+tank_heavy.hardness = 1
+
+tank_heavy.att_soft = 80
+tank_heavy.att_hard = 80
+tank_heavy.att_air = 0
+tank_heavy.range = 1
+
+tank_heavy.movement = 5
+tank_heavy.moveaction = true
+
+tank_heavy.cost = 10000
 
 
 return tank_heavy
