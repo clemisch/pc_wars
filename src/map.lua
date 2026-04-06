@@ -20,9 +20,11 @@ end
 
 local function is_build_tile(tile_obj)
     return tile_obj and (
+        tile_obj.name == "city" or
         tile_obj.name == "factory" or
         tile_obj.name == "airport" or
-        tile_obj.name == "seaport"
+        tile_obj.name == "seaport" or
+        tile_obj.name == "hq"
     )
 end
 
@@ -839,6 +841,20 @@ function Map:set_units_used(owner, is_used)
             end
         end
     end
+end
+
+function Map:get_num_buildings(owner)
+    local num_buildings = 0
+
+    for _, row in ipairs(self.tileTable) do
+        for _, tile_obj in ipairs(row) do
+            if tile_obj.owner == owner and is_build_tile(tile_obj) then
+                num_buildings = num_buildings + 1
+            end
+        end
+    end
+
+    return num_buildings
 end
 
 

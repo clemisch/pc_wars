@@ -56,8 +56,9 @@ function Game:enter(from, map, cursor)
     
     self.player_money = {}
     for i = 1,self.num_players do
-        self.player_money[i] = 3000
+        self.player_money[i] = 0
     end
+    self.player_money[self.active_player] = self.player_money[self.active_player] + 1000 * self.map:get_num_buildings(self.active_player)
 
     log.debug("Entering gamestate <Game>")
     if DEBUG then
@@ -138,6 +139,7 @@ end
 
 function Game:next_player()
     self.active_player = (self.active_player % self.num_players) + 1
+    self.player_money[self.active_player] = self.player_money[self.active_player] + 1000 * self.map:get_num_buildings(self.active_player)
     self.map:set_units_used(self.active_player, false)
     log.debug("Active player:", self.active_player)
 end
