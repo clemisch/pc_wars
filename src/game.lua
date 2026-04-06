@@ -90,8 +90,20 @@ function Game:draw()
     local unit_obj = cursor_tile and cursor_tile.unit
     if unit_obj then
         local font_height = love.graphics.getFont():getHeight()
-        text_left(HEIGHT_PIXELS - font_height, unit_obj.name, true)
-        text_left(HEIGHT_PIXELS, ("LP: %i/%i"):format(unit_obj.lp, unit_obj.max_lp), true)
+        local lines = {}
+
+        if #unit_obj.cargo > 0 then
+            for _, cargo_unit in ipairs(unit_obj.cargo) do
+                table.insert(lines, ("cargo: %s %i/%i"):format(cargo_unit.name, cargo_unit.lp, cargo_unit.max_lp))
+            end
+        end
+
+        table.insert(lines, ("%s %i/%i"):format(unit_obj.name, unit_obj.lp, unit_obj.max_lp))
+
+
+        for i, line in ipairs(lines) do
+            text_left(HEIGHT_PIXELS - (#lines - i) * font_height, line, true)
+        end
     end
 
     if DEBUG then
