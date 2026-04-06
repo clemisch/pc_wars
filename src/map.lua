@@ -54,6 +54,18 @@ local function can_unit_move_on_tile(unit_obj, tile_obj)
     return false
 end
 
+local function can_transport_unit(loader_unit, moving_unit)
+    return (
+        loader_unit and
+        moving_unit and
+        loader_unit.transport_capacity and
+        loader_unit.transport_capacity > 0 and
+        type(loader_unit.can_transport) == "function" and
+        #loader_unit.cargo < loader_unit.transport_capacity and
+        loader_unit:can_transport(moving_unit)
+    )
+end
+
 local function manhattan_distance(y0, x0, y1, x1)
     return math.abs(y1 - y0) + math.abs(x1 - x0)
 end
@@ -278,7 +290,7 @@ function Map:select(y, x)
 
             -- add tile to legal tiles if we could move there
             -- (*through* is not enough: if friendly unit on tile, we can move but can't stay)
-            if this_tile.unit == nil then
+            if this_tile.unit == nil or can_transport_unit(this_tile.unit, tile_sel.unit) then
                 out[key] = rr
             end
             
@@ -358,6 +370,29 @@ function Map:can_wait_at(y, x)
     return self.tiles_move and self.tiles_move[key] ~= nil
 end
 
+function Map:can_load_at(y, x)
+    if not self.is_select or not self.selected or self.preview then
+        return false
+    end
+
+    if y == self.selected.y and x == self.selected.x then
+        return false
+    end
+
+    local tile_target = self:get_tile(y, x)
+    local moving_unit = self.selected.tile.unit
+    local key = coords_to_string(y, x)
+
+    return (
+        tile_target ~= nil and
+        tile_target.unit ~= nil and
+        tile_target.unit.owner == moving_unit.owner and
+        self.tiles_move and
+        self.tiles_move[key] ~= nil and
+        can_transport_unit(tile_target.unit, moving_unit)
+    )
+end
+
 function Map:can_attack_from(y, x)
     if not self.preview or self.preview.y ~= y or self.preview.x ~= x then
         return false
@@ -395,7 +430,7 @@ function Map:can_attack_from(y, x)
 end
 
 function Map:begin_action_preview(y, x)
-    if not self:can_wait_at(y, x) then
+    if not self:can_wait_at(y, x) and not self:can_load_at(y, x) then
         return false
     end
 
@@ -404,15 +439,19 @@ function Map:begin_action_preview(y, x)
     end
 
     local unit_obj = self.selected.tile.unit
+    local tile_target = self:get_tile(y, x)
+    local is_load = self:can_load_at(y, x)
     self.preview = {
         from_y = self.selected.y,
         from_x = self.selected.x,
         y = y,
         x = x,
         unit = unit_obj,
+        is_load = is_load,
+        transport = is_load and tile_target.unit or nil,
     }
 
-    if y ~= self.selected.y or x ~= self.selected.x then
+    if not is_load and (y ~= self.selected.y or x ~= self.selected.x) then
         self.tileTable[y][x].unit = unit_obj
         self.selected.tile.unit = nil
     end
@@ -426,7 +465,10 @@ function Map:cancel_action_preview()
         return false
     end
 
-    if self.preview.y ~= self.preview.from_y or self.preview.x ~= self.preview.from_x then
+    if (
+        not self.preview.is_load and
+        (self.preview.y ~= self.preview.from_y or self.preview.x ~= self.preview.from_x)
+    ) then
         self.selected.tile.unit = self.preview.unit
         self.tileTable[self.preview.y][self.preview.x].unit = nil
     end
@@ -492,6 +534,17 @@ function Map:move_unit(y, x)
 end
 
 function Map:get_actions_at(y, x)
+    if not self.preview then
+        return {}
+    end
+
+    if self.preview.is_load then
+        if self.preview.y == y and self.preview.x == x then
+            return {"load"}
+        end
+        return {}
+    end
+
     if not self:can_wait_at(y, x) then
         return {}
     end
@@ -507,6 +560,32 @@ function Map:get_actions_at(y, x)
     end
 
     return actions
+end
+
+function Map:load_unit(y, x)
+    if (
+        not self.preview or
+        not self.preview.is_load or
+        self.preview.y ~= y or
+        self.preview.x ~= x
+    ) then
+        return false
+    end
+
+    local moving_unit = self.preview.unit
+    local transport = self.preview.transport
+    if not can_transport_unit(transport, moving_unit) then
+        return false
+    end
+
+    moving_unit:de_select()
+    moving_unit:set_used(true)
+    table.insert(transport.cargo, moving_unit)
+    self.selected.tile.unit = nil
+
+    self.preview = nil
+    self:de_select(self.selected.y, self.selected.x)
+    return true
 end
 
 function Map:wait_unit(y, x)

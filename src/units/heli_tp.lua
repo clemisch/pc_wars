@@ -16,7 +16,7 @@ heli_tp.can_build = true
 heli_tp.producer = "airport"
 
 heli_tp.transport_capacity = 1
-heli_tp.can_transport = function(unit) return unit.type == "inf" end
+heli_tp.can_transport = function(self, unit) return unit.type == "inf" end
 
 heli_tp.movement = 5
 heli_tp.moveaction = true
