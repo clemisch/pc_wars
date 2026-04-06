@@ -8,6 +8,18 @@ local unit_string_to_int = Loader.unit_string_to_num
 
 
 local Unit = Class.new()
+
+local function get_lp_indicator(lp, max_lp)
+    local relative_lp = (lp / max_lp) * 100
+    local rounded_lp = math.floor(relative_lp + 0.5)
+
+    if rounded_lp >= 94 then
+        return nil
+    end
+
+    return math.max(1, math.ceil(rounded_lp / 10))
+end
+
 function Unit:init(name, owner, lp, is_used)
     assert(name)
     assert(owner)
@@ -28,15 +40,35 @@ end
 
 function Unit:draw(y, x)
     -- draw the unit at tile y, x (lua indexing)
+    local draw_x = (x - 1) * 16 * SCALING
+    local draw_y = (y - 1) * 16 * SCALING - (self.is_select and SCALING*5 or 0)
+
     love.graphics.setColor(1, 1, 1, self.is_used and 0.6 or 1)
     love.graphics.draw(
         Tilesets.units.spritesheet, 
         Tilesets.units.quads[self.name][self.owner],
-        (x - 1) * 16 * SCALING,
-        (y - 1) * 16 * SCALING - (self.is_select and SCALING*5 or 0),
+        draw_x,
+        draw_y,
         0,
         SCALING
     )
+
+    local indicator = get_lp_indicator(self.lp, self.max_lp)
+    if indicator then
+        local label = tostring(indicator)
+        local font = love.graphics.getFont()
+        local label_scale = 2.0
+        local label_width = font:getWidth(label) * label_scale
+        local label_height = font:getHeight() * label_scale
+        local label_x = draw_x + (16 * SCALING) - label_width - 1
+        local label_y = draw_y + (16 * SCALING) - label_height + 1
+
+        love.graphics.setColor(0, 0, 0, 1)
+        love.graphics.rectangle("fill", label_x - 1, label_y - 1, label_width + 2, label_height + 2)
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.print(label, label_x, label_y, 0, label_scale, label_scale)
+    end
+
     love.graphics.setColor(1, 1, 1, 1)
 end
 
