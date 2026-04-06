@@ -11,6 +11,19 @@ local function format_action_name(name)
     return (name:gsub("_", " "):gsub("^%l", string.upper))
 end
 
+local function get_option_label(option)
+    if type(option) == "table" then
+        return option.label
+    end
+
+    return format_action_name(option)
+end
+
+function ActionMenu:refresh_options()
+    self.options = self.game:get_actions_at(self.y, self.x)
+    self.cursor = clamp(self.cursor, 1, math.max(#self.options, 1))
+end
+
 function ActionMenu:enter(from, y, x)
     log.debug("Entering gamestate <ActionMenu>")
 
@@ -20,7 +33,7 @@ function ActionMenu:enter(from, y, x)
     self.y = y
     self.x = x
     self.cursor = 1
-    self.options = self.game:get_actions_at(y, x)
+    self:refresh_options()
 end
 
 function ActionMenu:update(dt)
@@ -54,7 +67,7 @@ function ActionMenu:draw()
 
         love.graphics.setColor(0, 0, 0, 1)
         love.graphics.print(is_selected and ">" or " ", box_x + 12, this_row_y)
-        love.graphics.print(format_action_name(option_name), box_x + 28, this_row_y)
+        love.graphics.print(get_option_label(option_name), box_x + 28, this_row_y)
     end
 
     love.graphics.setColor(1, 1, 1, 1)
@@ -72,8 +85,9 @@ function ActionMenu:keypressed(key)
     end
 
     if key == "l" then
-        self.game:cancel_action_preview()
-        Gamestate.pop()
+        if self.game:cancel_action_preview() then
+            Gamestate.pop()
+        end
         return
     end
 
@@ -81,18 +95,22 @@ function ActionMenu:keypressed(key)
         return
     end
 
-    local option_name = self.options[self.cursor]
-    if option_name == "wait" and self.game:wait_action(self.y, self.x) then
+    local option = self.options[self.cursor]
+    local option_id = type(option) == "table" and option.id or option
+    if option_id == "wait" and self.game:wait_action(self.y, self.x) then
         Gamestate.pop()
-    elseif option_name == "load" and self.game:load_action(self.y, self.x) then
+    elseif option_id == "load" and self.game:load_action(self.y, self.x) then
         Gamestate.pop()
-    elseif option_name == "attack" then
+    elseif option_id == "attack" then
         Gamestate.push(attacktarget.AttackTarget, self.y, self.x)
+    elseif option_id == "unload" then
+        Gamestate.push(unloadtarget.UnloadTarget, self.y, self.x, option.cargo_index)
     end
 end
 
 function ActionMenu:resume(pre)
     log.debug("Resuming gamestate <ActionMenu>")
+    self:refresh_options()
 end
 
 return {

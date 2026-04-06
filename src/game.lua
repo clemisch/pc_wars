@@ -172,6 +172,10 @@ function Game:load_action(y, x)
     return self.map:load_unit(y, x)
 end
 
+function Game:unload_action(y, x)
+    return self.map:unload_unit(y, x)
+end
+
 function Game:get_actions_at(y, x)
     return self.map:get_actions_at(y, x)
 end
@@ -186,6 +190,14 @@ end
 
 function Game:cancel_attack_targeting()
     return self.map:cancel_attack_targeting()
+end
+
+function Game:begin_unload_targeting(y, x, cargo_index)
+    return self.map:begin_unload_targeting(y, x, cargo_index)
+end
+
+function Game:cancel_unload_targeting()
+    return self.map:cancel_unload_targeting()
 end
 
 

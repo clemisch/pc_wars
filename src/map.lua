@@ -66,6 +66,22 @@ local function can_transport_unit(loader_unit, moving_unit)
     )
 end
 
+local function can_unit_end_turn_on_tile(unit_obj, tile_obj)
+    if not unit_obj or not tile_obj then
+        return false
+    end
+
+    if unit_obj.target_type == "air" then
+        return true
+    end
+
+    if is_ship_unit(unit_obj) then
+        return can_unit_move_on_tile(unit_obj, tile_obj)
+    end
+
+    return tile_obj.name ~= "water"
+end
+
 local function manhattan_distance(y0, x0, y1, x1)
     return math.abs(y1 - y0) + math.abs(x1 - x0)
 end
@@ -191,6 +207,18 @@ function Map:set_attack_overlay_visible(is_visible)
     for key, _ in pairs(self.tiles_attack) do
         local y, x = string_to_coords(key)
         self.tileTable[y][x].do_attack_overlay = is_visible
+    end
+end
+
+function Map:set_unload_overlay_visible(is_visible)
+    if not self.tiles_unload then
+        return
+    end
+
+    for key, _ in pairs(self.tiles_unload) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_overlay = is_visible
+        self.tileTable[y][x].move_range = nil
     end
 end
 
@@ -329,6 +357,7 @@ end
 
 function Map:de_select(y, x)
     if self.is_select then
+        self:cancel_unload_targeting()
         self:cancel_attack_targeting()
         self:cancel_action_preview()
         self.selected.tile:de_select()
@@ -429,6 +458,14 @@ function Map:can_attack_from(y, x)
     return false
 end
 
+function Map:can_unload_from(y, x)
+    if not self.preview or self.preview.is_load or self.preview.y ~= y or self.preview.x ~= x then
+        return false
+    end
+
+    return self.preview.unit and #self.preview.unit.cargo > 0
+end
+
 function Map:begin_action_preview(y, x)
     if not self:can_wait_at(y, x) and not self:can_load_at(y, x) then
         return false
@@ -449,6 +486,7 @@ function Map:begin_action_preview(y, x)
         unit = unit_obj,
         is_load = is_load,
         transport = is_load and tile_target.unit or nil,
+        committed = false,
     }
 
     if not is_load and (y ~= self.selected.y or x ~= self.selected.x) then
@@ -462,6 +500,10 @@ end
 
 function Map:cancel_action_preview()
     if not self.preview then
+        return false
+    end
+
+    if self.preview.committed then
         return false
     end
 
@@ -521,6 +563,72 @@ function Map:cancel_attack_targeting()
     return true
 end
 
+function Map:begin_unload_targeting(y, x, cargo_index)
+    if not self:can_unload_from(y, x) then
+        return false
+    end
+
+    local cargo_unit = self.preview.unit.cargo[cargo_index]
+    if not cargo_unit then
+        return false
+    end
+
+    self:cancel_unload_targeting()
+    self.unload_preview = {
+        cargo_index = cargo_index,
+        unit = cargo_unit,
+        y = y,
+        x = x,
+    }
+
+    local candidates = {
+        {y = y - 1, x = x},
+        {y = y + 1, x = x},
+        {y = y, x = x - 1},
+        {y = y, x = x + 1},
+    }
+
+    self.tiles_unload = {}
+    local has_targets = false
+    for _, coords in ipairs(candidates) do
+        local tile_target = self:get_tile(coords.y, coords.x)
+        if (
+            tile_target and
+            tile_target.unit == nil and
+            can_unit_end_turn_on_tile(cargo_unit, tile_target)
+        ) then
+            local key = coords_to_string(coords.y, coords.x)
+            self.tiles_unload[key] = true
+            tile_target.do_overlay = true
+            tile_target.move_range = nil
+            has_targets = true
+        end
+    end
+
+    if not has_targets then
+        self:cancel_unload_targeting()
+        return false
+    end
+
+    return true
+end
+
+function Map:cancel_unload_targeting()
+    if not self.tiles_unload then
+        self.unload_preview = nil
+        return false
+    end
+
+    for key, _ in pairs(self.tiles_unload) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_overlay = false
+        self.tileTable[y][x].move_range = nil
+    end
+    self.tiles_unload = nil
+    self.unload_preview = nil
+    return true
+end
+
 function Map:move_unit(y, x)
     if not self:begin_action_preview(y, x) then
         return
@@ -554,9 +662,25 @@ function Map:get_actions_at(y, x)
         return {}
     end
 
-    local actions = {"wait"}
+    local actions = {
+        {id = "wait", label = "Wait"},
+    }
     if self:can_attack_from(y, x) then
-        table.insert(actions, "attack")
+        table.insert(actions, {id = "attack", label = "Attack"})
+    end
+    if self:can_unload_from(y, x) then
+        for cargo_index, cargo_unit in ipairs(unit_obj.cargo) do
+            table.insert(actions, {
+                id = "unload",
+                label = "Unload " .. cargo_unit.name,
+                cargo_index = cargo_index,
+            })
+        end
+    end
+    if self.preview.is_load then
+        actions = {
+            {id = "load", label = "Load"},
+        }
     end
 
     return actions
@@ -585,6 +709,38 @@ function Map:load_unit(y, x)
 
     self.preview = nil
     self:de_select(self.selected.y, self.selected.x)
+    return true
+end
+
+function Map:can_unload_unit_at(y, x)
+    if not self.unload_preview or not self.tiles_unload then
+        return false
+    end
+
+    local key = coords_to_string(y, x)
+    return self.tiles_unload[key] == true
+end
+
+function Map:unload_unit(y, x)
+    if not self:can_unload_unit_at(y, x) then
+        return false
+    end
+
+    local cargo_index = self.unload_preview.cargo_index
+    local transport = self.preview and self.preview.unit
+    local cargo_unit = transport and transport.cargo[cargo_index]
+    local tile_target = self:get_tile(y, x)
+    if not cargo_unit or not tile_target or tile_target.unit then
+        return false
+    end
+
+    table.remove(transport.cargo, cargo_index)
+    cargo_unit:set_used(true)
+    cargo_unit:de_select()
+    tile_target.unit = cargo_unit
+
+    self.preview.committed = true
+    self:cancel_unload_targeting()
     return true
 end
 

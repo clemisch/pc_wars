@@ -49,12 +49,14 @@ function Tile:draw_overlay(y, x)
             SCALING
         )
         -- number of moves to get this tile
-        love.graphics.print(
-            {{0, 0, 0}, tostring(self.move_range)}, 
-            ((x - 1) * 16 + 6) * SCALING, 
-            ((y - 1) * 16 + 6) * SCALING,
-            0, 2
-        )
+        if self.move_range ~= nil then
+            love.graphics.print(
+                {{0, 0, 0}, tostring(self.move_range)}, 
+                ((x - 1) * 16 + 6) * SCALING, 
+                ((y - 1) * 16 + 6) * SCALING,
+                0, 2
+            )
+        end
     end
 
     if self.do_attack_overlay then
