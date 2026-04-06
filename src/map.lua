@@ -234,8 +234,8 @@ function Map:draw()
     -- then draw overlay and units
     for y, row in ipairs(self.tileTable) do
         for x, tile in ipairs(row) do
-            tile:draw_overlay(y, x)
             tile:draw_unit(y, x)
+            tile:draw_overlay(y, x)
         end
     end
 end

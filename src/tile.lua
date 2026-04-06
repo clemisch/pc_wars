@@ -38,7 +38,6 @@ end
 
 function Tile:draw_overlay(y, x)
     if self.do_overlay then
-        -- white overlay
         local overlay = Tilesets.overlays.quads.move
         love.graphics.draw(
             Tilesets.overlays.move_spritesheet,
@@ -48,15 +47,6 @@ function Tile:draw_overlay(y, x)
             0,
             SCALING
         )
-        -- number of moves to get this tile
-        if self.move_range ~= nil then
-            love.graphics.print(
-                {{0, 0, 0}, tostring(self.move_range)}, 
-                ((x - 1) * 16 + 6) * SCALING, 
-                ((y - 1) * 16 + 6) * SCALING,
-                0, 2
-            )
-        end
     end
 
     if self.do_attack_overlay then
