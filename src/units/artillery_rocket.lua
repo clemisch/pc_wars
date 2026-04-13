@@ -3,7 +3,7 @@ local artillery_rocket = {}
 
 artillery_rocket.type = "vehicle"
 artillery_rocket.target_type = "land"
-artillery_rocket.attack_types = {"air"}
+artillery_rocket.attack_types = {"land", "sea"}
 artillery_rocket.lp = 100
 artillery_rocket.hardness = 1
 

@@ -2,7 +2,7 @@
 local bomb = {}
 
 bomb.type = "vehicle"
-bomb.target_type = "air"
+bomb.target_type = "land"
 bomb.attack_types = {"land", "sea"}
 bomb.lp = 100
 bomb.hardness = 0

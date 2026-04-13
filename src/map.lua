@@ -61,11 +61,62 @@ local function can_transport_unit(loader_unit, moving_unit)
         loader_unit and
         moving_unit and
         loader_unit.transport_capacity and
-        loader_unit.transport_capacity > 0 and
-        type(loader_unit.can_transport) == "function" and
         #loader_unit.cargo < loader_unit.transport_capacity and
+        type(loader_unit.can_transport) == "function" and
         loader_unit:can_transport(moving_unit)
     )
+end
+
+local function compute_move_tiles(tile_table, start_y, start_x, unit_obj, include_transport_tiles)
+    local out = {}
+
+    local function find_tile(yy, xx, rr)
+        local this_tile = tile_table[yy][xx]
+
+        if (
+            this_tile.unit and
+            this_tile.unit.owner ~= unit_obj.owner
+        ) then
+            return
+        end
+
+        if not can_unit_move_on_tile(unit_obj, this_tile) then
+            return
+        end
+
+        local key = coords_to_string(yy, xx)
+        local prev_range = out[key] or -1
+        if prev_range >= rr then
+            return
+        end
+
+        if (
+            this_tile.unit == nil or
+            (include_transport_tiles and can_transport_unit(this_tile.unit, unit_obj))
+        ) then
+            out[key] = rr
+        end
+
+        if rr == 0 then
+            return
+        end
+
+        if yy + 1 <= HEIGHT_TILES then
+            find_tile(yy + 1, xx, rr - 1)
+        end
+        if yy - 1 > 0 then
+            find_tile(yy - 1, xx, rr - 1)
+        end
+        if xx + 1 <= WIDTH_TILES then
+            find_tile(yy, xx + 1, rr - 1)
+        end
+        if xx - 1 > 0 then
+            find_tile(yy, xx - 1, rr - 1)
+        end
+    end
+
+    find_tile(start_y, start_x, unit_obj.movement)
+    return out
 end
 
 local function can_unit_end_turn_on_tile(unit_obj, tile_obj)
@@ -212,6 +263,17 @@ function Map:set_attack_overlay_visible(is_visible)
     end
 end
 
+function Map:set_attack_inspect_overlay_visible(is_visible)
+    if not self.tiles_attack_inspect then
+        return
+    end
+
+    for key, _ in pairs(self.tiles_attack_inspect) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_attack_overlay = is_visible
+    end
+end
+
 function Map:set_unload_overlay_visible(is_visible)
     if not self.tiles_unload then
         return
@@ -294,57 +356,7 @@ function Map:select(y, x)
         assert(tile_sel.unit.movement, tile_sel.unit.name)
         local move_range = tile_sel.unit.movement
 
-        local function find_tile(yy, xx, rr, out)
-            local this_tile = self.tileTable[yy][xx]
-
-            -- abort if move to/through tile is illegal
-            --  * enemy unit
-            --  * illegal terrain
-            if (
-                this_tile.unit and
-                this_tile.unit.owner ~= tile_sel.unit.owner
-            ) then
-                return
-            end
-
-            if not can_unit_move_on_tile(tile_sel.unit, this_tile) then
-                return
-            end
-
-            -- abort if visited tile before with more or same range
-            local key = coords_to_string(yy, xx)
-            local prev_range = out[key] or -1
-            if prev_range >= rr then 
-                return 
-            end
-
-            -- add tile to legal tiles if we could move there
-            -- (*through* is not enough: if friendly unit on tile, we can move but can't stay)
-            if this_tile.unit == nil or can_transport_unit(this_tile.unit, tile_sel.unit) then
-                out[key] = rr
-            end
-            
-            -- return if there is no range left
-            if rr == 0 then
-                return 
-            end
-            
-            if yy + 1 <= HEIGHT_TILES then
-                find_tile(yy + 1, xx, rr - 1, out)
-            end
-            if yy - 1 > 0 then
-                find_tile(yy - 1, xx, rr - 1, out)
-            end
-            if xx + 1 <= WIDTH_TILES then
-                find_tile(yy, xx + 1, rr - 1, out)
-            end
-            if xx - 1 > 0 then
-                find_tile(yy, xx - 1, rr - 1, out)
-            end
-        end
-        
-        self.tiles_move = {}
-        find_tile(y, x, move_range, self.tiles_move)
+        self.tiles_move = compute_move_tiles(self.tileTable, y, x, tile_sel.unit, true)
 
         -- activate overlay over tiles unit could move to
         for k, rr in pairs(self.tiles_move) do
@@ -562,6 +574,59 @@ function Map:cancel_attack_targeting()
         self.tileTable[y][x].do_attack_overlay = false
     end
     self.tiles_attack = nil
+    return true
+end
+
+function Map:show_attack_inspect(y, x)
+    self:hide_attack_inspect()
+
+    if self.is_select then
+        return false
+    end
+
+    local tile_sel = self:get_tile(y, x)
+    local unit_obj = tile_sel and tile_sel.unit
+    if not unit_obj then
+        return false
+    end
+
+    local positions = {}
+    if unit_obj.moveaction then
+        positions = compute_move_tiles(self.tileTable, y, x, unit_obj, false)
+    else
+        positions[coords_to_string(y, x)] = unit_obj.movement
+    end
+    positions[coords_to_string(y, x)] = unit_obj.movement
+
+    local min_range, max_range = get_attack_range_bounds(unit_obj)
+    self.tiles_attack_inspect = {}
+    for key, _ in pairs(positions) do
+        local yy, xx = string_to_coords(key)
+        for ty, row in ipairs(self.tileTable) do
+            for tx, _ in ipairs(row) do
+                local dist = manhattan_distance(yy, xx, ty, tx)
+                if dist >= min_range and dist <= max_range then
+                    local attack_key = coords_to_string(ty, tx)
+                    self.tiles_attack_inspect[attack_key] = true
+                    self.tileTable[ty][tx].do_attack_overlay = true
+                end
+            end
+        end
+    end
+
+    return true
+end
+
+function Map:hide_attack_inspect()
+    if not self.tiles_attack_inspect then
+        return false
+    end
+
+    for key, _ in pairs(self.tiles_attack_inspect) do
+        local y, x = string_to_coords(key)
+        self.tileTable[y][x].do_attack_overlay = false
+    end
+    self.tiles_attack_inspect = nil
     return true
 end
 

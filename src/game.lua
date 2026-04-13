@@ -51,6 +51,7 @@ function Game:enter(from, map, cursor)
     self.map = map
     self.map:set_game_state(self)
     self.cursor = cursor
+    self.is_attack_inspect_held = false
     self.active_player = 1
     self.num_players = 3
     
@@ -116,6 +117,12 @@ end
 
 
 function Game:keypressed(key)
+    if key == "l" and not self.map.is_select then
+        self.is_attack_inspect_held = true
+        self.map:show_attack_inspect(self.cursor.y, self.cursor.x)
+        return
+    end
+
     if 
         key == "p"      then Gamestate.push(pause.Pause) elseif
         key == "escape" then love.event.quit()           elseif 
@@ -124,10 +131,20 @@ function Game:keypressed(key)
     end
 
     local action = self.cursor:update(key)
+    if self.is_attack_inspect_held and not self.map.is_select then
+        self.map:show_attack_inspect(self.cursor.y, self.cursor.x)
+    end
     if action and action.action == "open_buymenu" then
         Gamestate.push(buymenu.BuyMenu, action.y, action.x)
     elseif action and action.action == "open_actionmenu" then
         Gamestate.push(actionmenu.ActionMenu, action.y, action.x)
+    end
+end
+
+function Game:keyreleased(key)
+    if key == "l" then
+        self.is_attack_inspect_held = false
+        self.map:hide_attack_inspect()
     end
 end
 

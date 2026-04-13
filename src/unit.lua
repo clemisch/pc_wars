@@ -40,6 +40,7 @@ function Unit:init(name, owner, lp, is_used)
         self.range = {self.range, self.range}
     end
 
+    assert(self.direct_fire ~= nil)
     if self.direct_fire == nil then
         self.direct_fire = true
     end
