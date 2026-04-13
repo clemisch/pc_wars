@@ -5,6 +5,14 @@ local log = require("src.log")
 log.level = LOGLEVEL
 
 local Cursor = Class.new()
+
+local HOLD_DIRECTIONS = {
+    w = {-1, 0},
+    s = {1, 0},
+    a = {0, -1},
+    d = {0, 1},
+}
+
 function Cursor:init(map)
     assert(map)
 
@@ -12,6 +20,11 @@ function Cursor:init(map)
     self.x = 1
     self.y = 1
     self.is_select = false
+    self.hold_key = nil
+    self.hold_delay = 0.22
+    self.hold_interval = 0.08
+    self.hold_elapsed = 0
+    self.hold_repeating = false
 end
 
 function Cursor:moveRel(y, x)
@@ -48,6 +61,62 @@ function Cursor:update(key)
         key == "l" then self:de_select()                 elseif
         key == "e" then self:moveAbs(1000, 1000) 
     end
+end
+
+function Cursor:begin_hold(key)
+    if not HOLD_DIRECTIONS[key] then
+        return
+    end
+
+    self.hold_key = key
+    self.hold_elapsed = 0
+    self.hold_repeating = false
+end
+
+function Cursor:end_hold(key)
+    if key ~= self.hold_key then
+        return
+    end
+
+    self.hold_key = nil
+    self.hold_elapsed = 0
+    self.hold_repeating = false
+end
+
+function Cursor:update_hold(dt)
+    if not self.hold_key then
+        return false
+    end
+
+    if not love.keyboard.isDown(self.hold_key) then
+        self.hold_key = nil
+        self.hold_elapsed = 0
+        self.hold_repeating = false
+        return false
+    end
+
+    self.hold_elapsed = self.hold_elapsed + dt
+    local dy, dx = unpack(HOLD_DIRECTIONS[self.hold_key])
+    local did_move = false
+
+    if not self.hold_repeating then
+        if self.hold_elapsed < self.hold_delay then
+            return false
+        end
+
+        self.hold_elapsed = self.hold_elapsed - self.hold_delay
+        self.hold_repeating = true
+        self:moveRel(dy, dx)
+        did_move = true
+    end
+
+    while self.hold_elapsed >= self.hold_interval do
+        self.hold_elapsed = self.hold_elapsed - self.hold_interval
+        self:moveRel(dy, dx)
+        did_move = true
+    end
+
+    return did_move
 end
 
 function Cursor:draw()

@@ -25,6 +25,8 @@ function AttackTarget:draw()
 end
 
 function AttackTarget:keypressed(key)
+    self.game.cursor:begin_hold(key)
+
     if key == "w" then
         self.game.cursor:moveRel(-1, 0)
         return
@@ -59,6 +61,10 @@ function AttackTarget:keypressed(key)
         end
         return
     end
+end
+
+function AttackTarget:keyreleased(key)
+    self.game.cursor:end_hold(key)
 end
 
 function AttackTarget:resume(pre)

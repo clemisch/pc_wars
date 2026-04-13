@@ -28,6 +28,8 @@ function UnloadTarget:draw()
 end
 
 function UnloadTarget:keypressed(key)
+    self.game.cursor:begin_hold(key)
+
     if key == "w" then
         self.game.cursor:moveRel(-1, 0)
         return
@@ -62,6 +64,10 @@ function UnloadTarget:keypressed(key)
         end
         return
     end
+end
+
+function UnloadTarget:keyreleased(key)
+    self.game.cursor:end_hold(key)
 end
 
 function UnloadTarget:resume(pre)

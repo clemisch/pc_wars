@@ -78,6 +78,10 @@ function Game:update(dt)
             self.ACC = 0
         end
     end
+
+    if self.cursor:update_hold(dt) and self.is_attack_inspect_held and not self.map.is_select then
+        self.map:show_attack_inspect(self.cursor.y, self.cursor.x)
+    end
 end
 
 
@@ -123,6 +127,8 @@ function Game:keypressed(key)
         return
     end
 
+    self.cursor:begin_hold(key)
+
     if 
         key == "p"      then Gamestate.push(pause.Pause) elseif
         key == "escape" then love.event.quit()           elseif 
@@ -142,6 +148,7 @@ function Game:keypressed(key)
 end
 
 function Game:keyreleased(key)
+    self.cursor:end_hold(key)
     if key == "l" then
         self.is_attack_inspect_held = false
         self.map:hide_attack_inspect()
