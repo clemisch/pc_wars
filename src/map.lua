@@ -586,7 +586,7 @@ function Map:show_attack_inspect(y, x)
 
     local tile_sel = self:get_tile(y, x)
     local unit_obj = tile_sel and tile_sel.unit
-    if not unit_obj then
+    if not unit_obj or not unit_obj.attack_types or #unit_obj.attack_types == 0 then
         return false
     end
 
